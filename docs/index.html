@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIProgrammer - give your AI a real Windows dev shell</title>
+<meta name="description" content="Programmer-Wander: a free, signed, single-binary MCP server with 105 tools in 11 categories. Files, shells, git, WSL, watchers, webhooks - a complete dev shell for Claude, LM Studio, and any MCP host.">
+<meta property="og:title" content="AIProgrammer - give your AI a real Windows dev shell">
+<meta property="og:description" content="Free, signed, single binary. 105 tools in 11 categories. The $5 Manager upgrade adds delegation and a live dashboard.">
+<meta property="og:image" content="https://aiprogrammer.ai/icon_256.png">
+<meta property="og:url" content="https://aiprogrammer.ai">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #e6ecf5; --dim: #8fa0b8; --faint: #5c6b84;
+    --bg0: #070b16; --bg1: #0b1020; --bg2: #121a30; --panel: #0e1526;
+    --line: #1e2a47; --cyan: #22d3ee; --violet: #a78bfa; --amber: #f5a623;
+    --mono: "IBM Plex Mono", Consolas, monospace;
+    --sans: "IBM Plex Sans", "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg0); color: var(--ink); font-family: var(--sans);
+    font-size: 17px; line-height: 1.65; overflow-x: hidden;
+  }
+  /* atmosphere: grid whisper + vignette */
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(1200px 700px at 75% -10%, rgba(167,139,250,.10), transparent 60%),
+      radial-gradient(900px 600px at 10% 110%, rgba(34,211,238,.07), transparent 60%),
+      repeating-linear-gradient(0deg, transparent 0 39px, rgba(30,42,71,.28) 39px 40px),
+      repeating-linear-gradient(90deg, transparent 0 39px, rgba(30,42,71,.28) 39px 40px);
+  }
+  main, header.site, footer.site { position: relative; z-index: 1; }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+  .mono { font-family: var(--mono); }
+
+  /* top bar */
+  header.site { padding: 22px 0; }
+  header.site .wrap { display: flex; align-items: center; gap: 14px; }
+  header.site img { width: 38px; height: 38px; border-radius: 9px; }
+  header.site .brand { font-family: var(--mono); font-weight: 700; font-size: 17px; letter-spacing: .02em; }
+  header.site .brand span { color: var(--cyan); }
+  header.site nav { margin-left: auto; display: flex; gap: 26px; font-size: 14.5px; }
+  header.site nav a { color: var(--dim); }
+  header.site nav a:hover { color: var(--ink); text-decoration: none; }
+
+  /* hero */
+  .hero { padding: 64px 0 84px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+  @media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; } }
+  .kicker { font-family: var(--mono); font-size: 13px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--amber); margin-bottom: 18px; }
+  h1 { font-family: var(--mono); font-weight: 700; font-size: clamp(34px, 4.6vw, 52px);
+    line-height: 1.12; letter-spacing: -.015em; margin-bottom: 20px; }
+  h1 em { font-style: normal; background: linear-gradient(92deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { color: var(--dim); font-size: 19px; max-width: 34em; margin-bottom: 34px; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .btn { display: inline-block; font-family: var(--mono); font-weight: 600; font-size: 15.5px;
+    padding: 14px 24px; border-radius: 10px; transition: transform .15s, box-shadow .15s; }
+  .btn:hover { text-decoration: none; transform: translateY(-2px); }
+  .btn-amber { background: var(--amber); color: #161002; box-shadow: 0 6px 28px rgba(245,166,35,.28); }
+  .btn-amber:hover { box-shadow: 0 10px 36px rgba(245,166,35,.4); }
+  .btn-ghost { border: 1px solid var(--line); color: var(--ink); background: rgba(18,26,48,.5); }
+  .btn-ghost:hover { border-color: var(--cyan); }
+  .under-cta { margin-top: 16px; font-size: 13.5px; color: var(--faint); font-family: var(--mono); }
+
+  /* terminal window */
+  .term { background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.5), 0 0 0 1px rgba(34,211,238,.06);
+    overflow: hidden; animation: rise .7s ease both .15s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  .term-bar { display: flex; align-items: center; gap: 7px; padding: 12px 16px;
+    border-bottom: 1px solid var(--line); background: rgba(11,16,32,.7); }
+  .term-bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--line); }
+  .term-bar i:nth-child(1) { background: #3d4a6b; } .term-bar i:nth-child(2) { background: #2c3a5e; }
+  .term-bar span { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  .term-body { padding: 20px 22px 24px; font-family: var(--mono); font-size: 13.5px; line-height: 1.75; }
+  .t-dim { color: var(--faint); } .t-cyan { color: var(--cyan); } .t-violet { color: var(--violet); }
+  .t-amber { color: var(--amber); } .t-ok { color: #4ade80; }
+  .type-line { overflow: hidden; white-space: nowrap; width: 0;
+    animation: typing 1.6s steps(38) forwards; }
+  .type-line.d2 { animation-delay: 1.2s; } .type-line.d3 { animation-delay: 2.6s; }
+  @keyframes typing { to { width: 100%; } }
+  .cursor { display: inline-block; width: 9px; height: 17px; background: var(--amber);
+    vertical-align: text-bottom; border-radius: 2px; animation: blink 1.05s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* trust strip */
+  .trust { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    background: rgba(14,21,38,.6); padding: 18px 0; }
+  .trust .wrap { display: flex; flex-wrap: wrap; gap: 12px 38px; justify-content: center;
+    font-family: var(--mono); font-size: 13.5px; color: var(--dim); }
+  .trust b { color: var(--ink); font-weight: 600; }
+  .trust .dot { color: var(--amber); }
+
+  /* sections */
+  section { padding: 84px 0; }
+  .sec-kicker { font-family: var(--mono); font-size: 12.5px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; }
+  h2 { font-family: var(--mono); font-weight: 700; font-size: clamp(24px, 3vw, 32px);
+    letter-spacing: -.01em; margin-bottom: 14px; }
+  .sec-lede { color: var(--dim); max-width: 44em; margin-bottom: 40px; }
+
+  /* category grid */
+  .cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .cat { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 18px 20px; transition: transform .16s, border-color .16s; }
+  .cat:hover { transform: translateY(-3px); border-color: var(--violet); }
+  .cat .tag { font-family: var(--mono); font-weight: 600; font-size: 15px; color: var(--cyan); }
+  .cat .n { float: right; font-family: var(--mono); color: var(--amber); font-weight: 600; }
+  .cat p { margin-top: 6px; font-size: 14px; color: var(--dim); line-height: 1.55; }
+
+  /* paste block */
+  .paste { background: linear-gradient(135deg, rgba(34,211,238,.07), rgba(167,139,250,.07));
+    border: 1px solid var(--line); border-radius: 16px; padding: 34px; }
+  .paste-grid { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; }
+  @media (max-width: 760px) { .paste-grid { grid-template-columns: 1fr; } }
+  .paste pre { font-family: var(--mono); font-size: 14px; color: var(--ink);
+    background: var(--bg1); border: 1px solid var(--line); border-radius: 10px;
+    padding: 18px 20px; white-space: pre-wrap; line-height: 1.6; }
+  .copy-btn { font-family: var(--mono); font-size: 14px; font-weight: 600; cursor: pointer;
+    background: var(--bg2); color: var(--cyan); border: 1px solid var(--cyan);
+    border-radius: 10px; padding: 13px 22px; transition: background .15s; }
+  .copy-btn:hover { background: rgba(34,211,238,.12); }
+
+  /* steps */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; counter-reset: s; }
+  @media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
+  .step { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
+  .step::before { counter-increment: s; content: "0" counter(s);
+    font-family: var(--mono); font-weight: 700; font-size: 26px; display: block;
+    background: linear-gradient(92deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 10px; }
+  .step b { display: block; margin-bottom: 6px; font-size: 16.5px; }
+  .step p { font-size: 14.5px; color: var(--dim); }
+  .step code { font-family: var(--mono); font-size: 12.8px; color: var(--cyan);
+    background: var(--bg1); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; }
+
+  /* upgrade */
+  .upgrade { border: 1px solid var(--violet); border-radius: 18px; padding: 44px;
+    background:
+      radial-gradient(700px 300px at 90% 0%, rgba(167,139,250,.14), transparent 60%),
+      var(--panel);
+    display: grid; grid-template-columns: 1.3fr .7fr; gap: 36px; align-items: center; }
+  @media (max-width: 860px) { .upgrade { grid-template-columns: 1fr; } }
+  .price { font-family: var(--mono); text-align: center; }
+  .price .amt { font-size: 76px; font-weight: 700; line-height: 1;
+    background: linear-gradient(92deg, var(--violet), var(--cyan));
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .price .per { color: var(--faint); font-size: 14px; margin-top: 6px; }
+  .upgrade ul { margin: 18px 0 26px 20px; color: var(--dim); }
+  .upgrade li { margin-bottom: 8px; }
+  .upgrade li b { color: var(--ink); }
+
+  footer.site { border-top: 1px solid var(--line); padding: 44px 0 60px;
+    color: var(--faint); font-size: 14px; }
+  footer.site .wrap { display: flex; flex-wrap: wrap; gap: 14px 40px; }
+  footer.site a { color: var(--dim); }
+  .reveal { animation: rise .7s ease both; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <img src="icon_256.png" alt="">
+    <div class="brand">ai<span>programmer</span>.ai</div>
+    <nav>
+      <a href="#tools">Tools</a>
+      <a href="#install">Install</a>
+      <a href="#kit">Plugin kit</a>
+      <a href="#upgrade">Upgrade</a>
+      <a href="https://github.com/AIWander/Programmer-Wander">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="kicker">Free forever - Windows native - Apache 2.0</div>
+      <h1>Give your AI a <em>real dev shell</em>.</h1>
+      <p class="lede"><b>Programmer-Wander</b> is a single signed binary that hands any AI a
+      complete Windows toolbox: files, shells, full git, WSL, persistent sessions,
+      watchers, webhooks, transforms. <b>105 tools in 11 organized categories.</b>
+      No cloud, no subscription, no telemetry.</p>
+      <div class="cta-row">
+        <a class="btn btn-amber" href="https://github.com/AIWander/Programmer-Wander/releases/latest">Download signed installer</a>
+        <a class="btn btn-ghost" href="#install">Or paste one prompt to your AI</a>
+      </div>
+      <div class="under-cta">Authenticode-signed - works with Claude Desktop, Claude Code, Cowork, LM Studio, any MCP host</div>
+    </div>
+
+    <div class="term">
+      <div class="term-bar"><i></i><i></i><i></i><span>your AI + programmer</span></div>
+      <div class="term-body">
+        <div class="type-line"><span class="t-amber">&gt;</span> Fix the failing test and commit it.</div>
+        <div class="type-line d2"><span class="t-dim">[Files]</span> read_file <span class="t-dim">-&gt;</span> <span class="t-cyan">edit_block</span> <span class="t-dim">applied</span></div>
+        <div class="type-line d3"><span class="t-dim">[Shell]</span> bash cargo test <span class="t-ok">.... 24 passed</span></div>
+        <div style="margin-top:4px"><span class="t-dim">[Git]</span> <span class="t-violet">git_commit</span> <span class="t-dim">"fix: off-by-one in parser"</span> <span class="cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="wrap">
+    <div><span class="dot">*</span> <b>One .exe</b>, statically linked</div>
+    <div><span class="dot">*</span> <b>Signed</b> - Authenticode, SHA256SUMS published</div>
+    <div><span class="dot">*</span> <b>Local-first</b> - your machine, your data</div>
+    <div><span class="dot">*</span> <b>Open source</b> - Apache 2.0</div>
+  </div>
+</div>
+
+<section id="tools">
+  <div class="wrap">
+    <div class="sec-kicker">tools/list</div>
+    <h2>105 tools that come up organized.</h2>
+    <p class="sec-lede">Every tool is tagged with its category and listed in a curated
+    workbench order - so your AI's tool list reads grouped in any host, and it picks
+    the right tool the first time.</p>
+    <div class="cats">
+      <div class="cat"><span class="tag">[Files]</span><span class="n">13</span><p>read, write, atomic edit_block surgery, copy/move, diff, tail, stats</p></div>
+      <div class="cat"><span class="tag">[Search]</span><span class="n">4</span><p>native-speed grep, file search, smart large-file reads</p></div>
+      <div class="cat"><span class="tag">[Shell]</span><span class="n">8</span><p>bash, powershell, one-shots, chains, auto-retry, saved shortcuts</p></div>
+      <div class="cat"><span class="tag">[Git]</span><span class="n">12</span><p>status to clone, push, stash, remotes - the whole cycle</p></div>
+      <div class="cat"><span class="tag">[Sessions]</span><span class="n">20</span><p>persistent shells that keep state, history, checkpoints, crash recovery</p></div>
+      <div class="cat"><span class="tag">[Background]</span><span class="n">12</span><p>file watchers, local webhooks, WSL background jobs with logs</p></div>
+      <div class="cat"><span class="tag">[Net]</span><span class="n">4</span><p>HTTP request, download, scrape-to-text, port checks</p></div>
+      <div class="cat"><span class="tag">[Data]</span><span class="n">16</span><p>json/csv/base64/hash transforms, archives, sqlite, md-to-docx</p></div>
+      <div class="cat"><span class="tag">[System]</span><span class="n">9</span><p>screenshot, clipboard, processes, registry read, toast notifications</p></div>
+      <div class="cat"><span class="tag">[Guard]</span><span class="n">5</span><p>command pre-flight, audit log, deploy preflight, tool fallbacks</p></div>
+      <div class="cat"><span class="tag">[Plan]</span><span class="n">2</span><p>task ingredients and cross-server planning</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="sec-kicker">sixty seconds</div>
+    <h2>Install it - or let your AI install it.</h2>
+    <p class="sec-lede">Our favorite way: paste one prompt and your AI does the rest.
+    No other tool onboards through the AI itself.</p>
+
+    <div class="paste">
+      <div class="paste-grid">
+        <pre id="prompt-text">Install AIWander/Programmer-Wander on my Windows machine using the AI install runbook at https://github.com/AIWander/Programmer-Wander#for-ai-assistants</pre>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('prompt-text').textContent).then(()=>{this.textContent='copied'; setTimeout(()=>this.textContent='copy prompt',1600)})">copy prompt</button>
+      </div>
+    </div>
+
+    <div style="height:28px"></div>
+    <div class="steps">
+      <div class="step"><b>Get the binary</b><p>Signed installer or portable zip from <a href="https://github.com/AIWander/Programmer-Wander/releases/latest">Releases</a>. One file; state lives beside it.</p></div>
+      <div class="step"><b>Register your host</b><p><code>programmer.exe install --target claude-desktop</code> - or claude-code, cowork, lm-studio, all.</p></div>
+      <div class="step"><b>Restart and ask</b><p>Restart the host, then ask: <code>What can the programmer server do?</code> The bundled skills teach it everything.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="kit">
+  <div class="wrap">
+    <div class="sec-kicker">plugin kit</div>
+    <h2>Skills that make your AI good at it. Guard hooks that keep it safe.</h2>
+    <p class="sec-lede">Five skills (orientation, full toolmap, dev loop, background ops,
+    safe ops) plus opt-in guard hooks that block destructive commands and audit every
+    decision - inert until you review and render them yourself.</p>
+    <div class="paste"><div class="paste-grid">
+      <pre id="mkt-text">claude plugin marketplace add AIWander/aiprogrammer</pre>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('mkt-text').textContent).then(()=>{this.textContent='copied'; setTimeout(()=>this.textContent='copy command',1600)})">copy command</button>
+    </div></div>
+  </div>
+</section>
+
+<section id="upgrade">
+  <div class="wrap">
+    <div class="upgrade">
+      <div>
+        <div class="sec-kicker" style="color:var(--violet)">the upgrade</div>
+        <h2>Manager: your whole AI bench, one dashboard.</h2>
+        <ul>
+          <li><b>Delegate</b> work to Claude Code, Codex CLI, and Grok Build CLI from one place</li>
+          <li><b>One live dashboard</b> for both products - it detects your Programmer install automatically</li>
+          <li><b>Task history, alerts, continuity</b> across sessions and restarts</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://aiwander.ai" style="border-color:var(--violet)">Get Manager at aiwander.ai</a>
+        <p style="margin-top:14px; font-size:13.5px; color:var(--faint)">Programmer stays free either way. Voice add-on: also free, optional on both.</p>
+      </div>
+      <div class="price"><div class="amt">$5</div><div class="per">one time - no subscription</div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>AIProgrammer is part of <a href="https://aiwander.ai">AIWander</a></div>
+    <div><a href="https://github.com/AIWander/Programmer-Wander">Server source</a></div>
+    <div><a href="https://github.com/AIWander/aiprogrammer">Plugin kit</a></div>
+    <div><a href="https://github.com/AIWander/Programmer-Wander/blob/main/LICENSE">Apache 2.0</a></div>
+    <div>Signed by Joseph Wander via Azure Trusted Signing</div>
+  </div>
+</footer>
+
+</body>
+</html>
