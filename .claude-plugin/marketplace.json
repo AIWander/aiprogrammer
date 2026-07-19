@@ -1,0 +1,33 @@
+{
+  "name": "aiprogrammer",
+  "owner": {
+    "name": "AIWander"
+  },
+  "description": "Skills and optional guard hooks for the free Programmer-Wander MCP dev shell.",
+  "plugins": [
+    {
+      "name": "programmer",
+      "source": "./plugins/programmer",
+      "description": "Five Programmer-Wander skills plus inert, reviewable guard-hook templates.",
+      "version": "0.2.0",
+      "author": "AIWander",
+      "homepage": "https://aiprogrammer.ai",
+      "repository": "https://github.com/AIWander/aiprogrammer",
+      "license": "Apache-2.0",
+      "category": "Developer Tools",
+      "keywords": ["mcp", "dev-shell", "rust", "windows", "git", "wsl", "hooks"]
+    },
+    {
+      "name": "programmer-skills",
+      "source": "./plugins/programmer-skills",
+      "description": "The same five Programmer-Wander skills with no hook code.",
+      "version": "0.2.0",
+      "author": "AIWander",
+      "homepage": "https://aiprogrammer.ai",
+      "repository": "https://github.com/AIWander/aiprogrammer",
+      "license": "Apache-2.0",
+      "category": "Developer Tools",
+      "keywords": ["mcp", "dev-shell", "rust", "windows", "git", "wsl", "skills"]
+    }
+  ]
+}
