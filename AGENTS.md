@@ -39,9 +39,10 @@ server code changes happen THERE, plugin-kit changes happen HERE.
 1. De-duplicate the dual home: Programmer-Wander still contains a copy of
    `plugins/`. Replace that copy with a short pointer README to this repo (one
    PR there), so the kit has exactly one canonical source.
-2. Landing page for aiprogrammer.ai (this repo can host it via GitHub Pages or
-   a `site/` folder): free download + category tool map + the $5 UniMan
-   upgrade card. Match the dark onboarding aesthetic shipped in the installer.
+2. Landing page for aiprogrammer.ai - BUILT at `docs/` (2026-07-18). Serving:
+   Cloudflare Pages connected to this repo, build output directory `docs`,
+   framework preset None (house pattern, matches aihands.ai). GitHub Pages
+   stays enabled only as a redirect mirror.
 3. Swap the placeholder upgrade link for the real $5 checkout URL when the
    maintainer provides it (README here, Programmer-Wander README, and the
    installer onboarding page in the maintainer's build tree).
