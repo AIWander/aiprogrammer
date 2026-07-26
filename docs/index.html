@@ -6,7 +6,7 @@
 <title>AIProgrammer - give your AI a real Windows dev shell</title>
 <meta name="description" content="Programmer-Wander: a free, signed, single-binary MCP server with 105 tools in 11 categories. Files, shells, git, WSL, watchers, webhooks - a complete dev shell for Claude, LM Studio, and any MCP host.">
 <meta property="og:title" content="AIProgrammer - give your AI a real Windows dev shell">
-<meta property="og:description" content="Free, signed, single binary. 105 tools in 11 categories. The $5 Manager upgrade adds delegation and a live dashboard.">
+<meta property="og:description" content="Free, signed, single binary. 105 tools in 11 categories. Manager, the optional delegation and dashboard companion, is Beta - coming soon.">
 <meta property="og:image" content="https://aiprogrammer.ai/icon_256.png">
 <meta property="og:url" content="https://aiprogrammer.ai">
 <link rel="icon" href="favicon.ico">
@@ -196,10 +196,10 @@
       watchers, webhooks, transforms. <b>105 tools in 11 organized categories.</b>
       No cloud, no subscription, no telemetry.</p>
       <div class="cta-row">
-        <a class="btn btn-amber" href="https://github.com/AIWander/Programmer-Wander/releases/latest">Download signed installer</a>
+        <span class="btn btn-amber" aria-disabled="true" style="opacity:.72; cursor:default">Download coming soon - verified build in progress</span>
         <a class="btn btn-ghost" href="#install">Or paste one prompt to your AI</a>
       </div>
-      <div class="under-cta">Authenticode-signed - works with Claude Desktop, Claude Code, Cowork, LM Studio, any MCP host</div>
+      <div class="under-cta">Programmer stays free. No installer is offered from this page right now; when the verified signed build is published, this page will link that exact version. Authenticode-signed - works with Claude Desktop, Claude Code, Cowork, LM Studio, any MCP host</div>
     </div>
 
     <div class="term">
@@ -251,18 +251,19 @@
     <div class="sec-kicker">sixty seconds</div>
     <h2>Install it - or let your AI install it.</h2>
     <p class="sec-lede">Our favorite way: paste one prompt and your AI does the rest.
-    No other tool onboards through the AI itself.</p>
+    No other tool onboards through the AI itself. The prompt below prepares the setup now;
+    it installs once the verified build is published.</p>
 
     <div class="paste">
       <div class="paste-grid">
-        <pre id="prompt-text">Install AIWander/Programmer-Wander on my Windows machine using the AI install runbook at https://github.com/AIWander/Programmer-Wander#for-ai-assistants</pre>
+        <pre id="prompt-text">Help me plan a Programmer-Wander setup on my Windows machine: identify my architecture and the correct host route, and show me the exact target and rollback step. Do not download or install anything yet - the verified build is not published.</pre>
         <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('prompt-text').textContent).then(()=>{this.textContent='copied'; setTimeout(()=>this.textContent='copy prompt',1600)})">copy prompt</button>
       </div>
     </div>
 
     <div style="height:28px"></div>
     <div class="steps">
-      <div class="step"><b>Get the binary</b><p>Signed installer or portable zip from <a href="https://github.com/AIWander/Programmer-Wander/releases/latest">Releases</a>. One file; state lives beside it.</p></div>
+      <div class="step"><b>Get the binary</b><p>The verified signed build is coming soon. No installer or portable zip is offered from this page yet; when one is published it will be named by exact version. One file; state lives beside it.</p></div>
       <div class="step"><b>Register your host</b><p><code>programmer.exe install --target claude-desktop</code> - or claude-code, cowork, lm-studio, all.</p></div>
       <div class="step"><b>Restart and ask</b><p>Restart the host, then ask: <code>What can the programmer server do?</code> The bundled skills teach it everything.</p></div>
     </div>
@@ -288,16 +289,16 @@
     <div class="upgrade">
       <div>
         <div class="sec-kicker" style="color:var(--violet)">the upgrade</div>
-        <h2>Manager: your whole AI bench, one dashboard.</h2>
+        <h2>Manager: your whole AI bench, one dashboard. Beta - Coming Soon.</h2>
         <ul>
           <li><b>Delegate</b> work to Claude Code, Codex CLI, and Grok Build CLI from one place</li>
           <li><b>One live dashboard</b> for both products - it detects your Programmer install automatically</li>
           <li><b>Task history, alerts, continuity</b> across sessions and restarts</li>
         </ul>
-        <a class="btn btn-ghost" href="https://aiwander.ai" style="border-color:var(--violet)">Get Manager at aiwander.ai</a>
-        <p style="margin-top:14px; font-size:13.5px; color:var(--faint)">Programmer stays free either way. Voice add-on: also free, optional on both.</p>
+        <span class="btn btn-ghost" aria-disabled="true" style="border-color:var(--violet); opacity:.72; cursor:default">Manager Beta - Coming Soon</span>
+        <p style="margin-top:14px; font-size:13.5px; color:var(--faint)">Programmer stays free either way. No price is published for Manager and there is no checkout, so nothing here is an offer to sell. Voice add-on: also free, optional on both.</p>
       </div>
-      <div class="price"><div class="amt">$5</div><div class="per">one time - no subscription</div></div>
+      <div class="price"><div class="amt" style="font-size:34px">BETA<br>COMING SOON</div><div class="per">no published price and no checkout</div></div>
     </div>
   </div>
 </section>
