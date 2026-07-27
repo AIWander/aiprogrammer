@@ -10,7 +10,9 @@
       "source": "./plugins/programmer",
       "description": "Five Programmer-Wander skills plus inert, reviewable guard-hook templates.",
       "version": "0.2.0",
-      "author": "AIWander",
+      "author": {
+        "name": "AIWander"
+      },
       "homepage": "https://aiprogrammer.ai",
       "repository": "https://github.com/AIWander/aiprogrammer",
       "license": "Apache-2.0",
@@ -22,7 +24,9 @@
       "source": "./plugins/programmer-skills",
       "description": "The same five Programmer-Wander skills with no hook code.",
       "version": "0.2.0",
-      "author": "AIWander",
+      "author": {
+        "name": "AIWander"
+      },
       "homepage": "https://aiprogrammer.ai",
       "repository": "https://github.com/AIWander/aiprogrammer",
       "license": "Apache-2.0",
