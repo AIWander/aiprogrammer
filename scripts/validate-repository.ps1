@@ -4,7 +4,13 @@ $hooked = Join-Path $root 'plugins/programmer/skills'
 $plain = Join-Path $root 'plugins/programmer-skills/skills'
 $hookedSkills = @(Get-ChildItem -LiteralPath $hooked -Directory)
 $plainSkills = @(Get-ChildItem -LiteralPath $plain -Directory)
-if ($hookedSkills.Count -ne 5 -or $plainSkills.Count -ne 5) { throw 'Both profiles must contain exactly five skills.' }
+# Census assertion, exact and intentional: bump this ONE constant when adding or removing a skill,
+# and update the prose that quotes the count (plugin.json descriptions, README/AGENTS profile lines).
+# Kept exact rather than "both profiles agree" so an accidental deletion still fails the build.
+$expectedSkillCount = 6
+if ($hookedSkills.Count -ne $expectedSkillCount -or $plainSkills.Count -ne $expectedSkillCount) {
+    throw "Both profiles must contain exactly $expectedSkillCount skills (hooked=$($hookedSkills.Count), plain=$($plainSkills.Count))."
+}
 foreach ($skill in $hookedSkills) {
     $left = Join-Path $skill.FullName 'SKILL.md'
     $right = Join-Path (Join-Path $plain $skill.Name) 'SKILL.md'

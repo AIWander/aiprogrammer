@@ -1,7 +1,7 @@
 {
   "name": "programmer",
   "version": "0.2.0",
-  "description": "Operate the Programmer-Wander dev shell with five skills and optional reviewed guard-hook templates.",
+  "description": "Operate the Programmer-Wander dev shell with six skills and optional reviewed guard-hook templates.",
   "author": {
     "name": "AIWander"
   },

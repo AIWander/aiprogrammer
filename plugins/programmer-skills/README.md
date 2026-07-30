@@ -1,6 +1,6 @@
 # programmer-skills (plugin profile)
 
-Skill-only profile: the same five skills as the `programmer` profile with no
+Skill-only profile: the same six skills as the `programmer` profile with no
 hook code of any kind. For hosts or users that do not want lifecycle hooks.
 
 - `skills/` - programmer-getting-started, programmer-toolmap,

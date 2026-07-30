@@ -1,6 +1,6 @@
 # programmer (plugin profile)
 
-Full profile: five skills plus inert, reviewable guard-hook templates.
+Full profile: six skills plus inert, reviewable guard-hook templates.
 
 Contents:
 

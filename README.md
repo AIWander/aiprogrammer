@@ -11,21 +11,47 @@ categories (Files, Search, Shell, Git, Sessions, Background, Net, Data, System,
 Guard, Plan). This repository is the plugin kit that teaches an AI host how to
 use it well - and, optionally, how to guard it.
 
+## Install status
+
+The current server release, `v0.2.0-alpha`, is for controlled Windows alpha
+testing. It is not yet a broad one-click release. A fresh probe of the published
+x64 and ARM64 portable artifacts found three release blockers:
+
+- `programmer.exe --version` reports `0.2.0-alpha`, but MCP `initialize`
+  identifies the server as `antigravity-rs` version `1.0.0`.
+- install and uninstall operations started within the same second can reuse a
+  backup filename and overwrite the earlier host-config backup.
+- overriding `USERPROFILE` does not isolate the executable's home-directory
+  lookup, so a separate Windows account or VM is required for clean-host proof.
+
+The server still returned the documented 105 tools in 11 categories, but that
+does not clear the identity, backup-integrity, or clean-host defects.
+
+See the [host install guides](docs/install/README.md) for the exact supported
+paths, release hashes, verification steps, and blocked channels.
+
 ## Install
 
-1. Install the server: download the signed installer or portable zip from
-   [Programmer-Wander releases](https://github.com/AIWander/Programmer-Wander/releases)
-   and register it (`programmer.exe install --target <host>`).
-2. Add this repository through your host's plugin flow (for Claude Code:
-   `claude plugin marketplace add AIWander/aiprogrammer`), then install exactly
-   ONE profile:
+1. Download the correct signed installer or portable zip from the
+   [`v0.2.0-alpha` release](https://github.com/AIWander/Programmer-Wander/releases/tag/v0.2.0-alpha)
+   and verify it against the published `SHA256SUMS`.
+2. Follow the guide for
+   [Claude Code](docs/install/claude-code.md),
+   [Codex](docs/install/codex.md),
+   [Claude Desktop](docs/install/claude-desktop.md), or
+   [LM Studio](docs/install/lm-studio.md).
+3. Add this repository through the host's plugin flow, then install exactly ONE
+   profile:
 
 | Profile | Contents |
 | --- | --- |
-| `programmer` | Five skills plus inert, reviewable guard-hook templates |
-| `programmer-skills` | The same five skills with no hook code |
+| `programmer` | Six skills plus inert, reviewable guard-hook templates |
+| `programmer-skills` | The same six skills with no hook code |
 
-## The five skills
+The plugin profiles teach a host how to use an existing `programmer` MCP
+connection. They do not install the server or silently activate hooks.
+
+## The six skills
 
 | Skill | Job |
 |-------|-----|
@@ -34,6 +60,7 @@ use it well - and, optionally, how to guard it.
 | `programmer-dev-loop` | The edit-build-test-commit loop, cargo-on-Windows rules |
 | `programmer-background-ops` | Persistent shells, WSL jobs, watchers, webhooks, delta polling |
 | `programmer-safe-ops` | Command pre-flight, archive-first, staged swaps, kill hygiene |
+| `programmer-sessions` | Choosing between shell_session and live_shell, and their recovery semantics |
 
 ## The guard hooks (opt-in, never auto-loaded)
 

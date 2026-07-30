@@ -5,7 +5,7 @@ Install exactly one current Programmer-Wander profile.
 | Plugin | Purpose |
 | --- | --- |
 | `programmer` | Five skills plus inert guard-hook templates for hosts that can review, trust, and probe hooks |
-| `programmer-skills` | The same five skills with no hook code |
+| `programmer-skills` | The same six skills with no hook code |
 
 Both profiles expect an existing `programmer` MCP connection (register the
 server with `programmer.exe install --target <host>`). Neither profile installs
