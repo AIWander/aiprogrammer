@@ -39,7 +39,7 @@ RECURSIVE_DELETE = re.compile(
 )
 FORCE_PUSH = re.compile(r"git\s+push\b.*(\s--force\b|\s-f\b)", re.IGNORECASE)
 PROCESS_KILL = re.compile(r"(taskkill\b|stop-process\b|kill(all)?\s)", re.IGNORECASE)
-DISK_DESTROY = re.compile(r"(format-volume|diskpart|cipher\s+/w|mkfs\.)", re.IGNORECASE)
+DISK_DESTROY = re.compile(r"(format-volume|diskpart|cipher\s+/w|mkfs\.|format\s+[a-z]:)", re.IGNORECASE)
 CARGO = re.compile(r"\b(cargo|rustc)\b", re.IGNORECASE)
 
 
@@ -131,6 +131,81 @@ def audit(event: str, host: str, payload: dict[str, Any], decision: str, detail:
         pass
 
 
+STREAK_WINDOW_SECONDS = 30 * 60
+STREAK_THRESHOLD = 3
+
+
+def _streak_state_path() -> Path:
+    root = Path(os.environ.get("LOCALAPPDATA") or Path.home()) / "ProgrammerWander" / "hooks"
+    root.mkdir(parents=True, exist_ok=True)
+    return root / "failure_streaks.json"
+
+
+def _fallback_map() -> dict[str, Any]:
+    """Load the learned fallback map. CPC hosts point CPC_ERROR_FALLBACKS at the
+    Volumes copy (default below); shipped users without a map get generic advice."""
+    candidates = [
+        os.environ.get("CPC_ERROR_FALLBACKS", ""),
+        r"C:\My Drive\Volumes\logs\error_fallbacks.json",
+    ]
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            try:
+                return json.loads(Path(candidate).read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                continue
+    return {}
+
+
+def three_strike_advice(event: str, payload: dict[str, Any]) -> tuple[str, str]:
+    """3-strike fallback hook (ratified 2026-07-29, replaces the retired tool_fallback
+    tool): when the same tool+target fails 3 times inside the window, inject the
+    recorded fallback from the learned map. Advisory only - never blocking."""
+    tool = base_tool(payload)
+    args = tool_args(payload)
+    target = (command_text(args) or str(args.get("path", "")) or
+              str(args.get("file_path", "")) or str(args.get("url", "")))[:120]
+    key = f"{tool}|{target}"
+    now = dt.datetime.now(dt.timezone.utc).timestamp()
+
+    state_path = _streak_state_path()
+    try:
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        state = {}
+    # Expire stale streaks, bump this one
+    state = {k: v for k, v in state.items()
+             if isinstance(v, dict) and now - v.get("last", 0) < STREAK_WINDOW_SECONDS}
+    entry = state.get(key, {"count": 0, "last": now})
+    entry["count"] = int(entry.get("count", 0)) + 1
+    entry["last"] = now
+    state[key] = entry
+    try:
+        state_path.write_text(json.dumps(state, ensure_ascii=True), encoding="utf-8")
+    except OSError:
+        pass
+
+    if entry["count"] < STREAK_THRESHOLD:
+        return "observe", f"failure-streak {entry['count']}/{STREAK_THRESHOLD}"
+
+    # Third strike: consult the learned map for a recorded fallback
+    fallback_note = ""
+    for name, rec in _fallback_map().items():
+        if name.startswith("_") or not isinstance(rec, dict):
+            continue
+        trigger = str(rec.get("trigger", "")).lower()
+        if trigger and (trigger in tool.lower() or tool.lower() in trigger):
+            fallback_note = (f" Recorded fallback for this class ('{name}'): "
+                             f"{rec.get('fallback', '?')}"
+                             + (f" (symptom: {rec.get('symptom')})" if rec.get("symptom") else ""))
+            break
+    emit_context(event, f"'{tool}' has failed {entry['count']} times on the same target "
+                        f"inside {STREAK_WINDOW_SECONDS // 60} minutes - stop retrying the "
+                        f"same call.{fallback_note or ' No recorded fallback for this class; switch approach (different tool, powershell/bash direct, or ask the user).'}"
+                        " Run doctor to confirm this host actually has the capability.")
+    return "warn", f"three-strike advisory ({entry['count']})"
+
+
 def check_command(event: str, cmd: str) -> tuple[str, str]:
     """Return (decision, message) for a command string."""
     if DISK_DESTROY.search(cmd):
@@ -201,8 +276,7 @@ def main() -> int:
                 emit_context(event, "Target is under a protected config root. Archive-first: "
                                     "copy the current version to a backups dir before overwriting.")
     elif event == "PostToolUseFailure":
-        emit_context(event, "Programmer tool failed. Consider tool_fallback for an alternative, "
-                            "smart_exec for auto-retry, or security_audit_log if it was blocked.")
+        decision, detail = three_strike_advice(event, payload)
 
     audit(event, options.host, payload, decision, detail)
     return 0
