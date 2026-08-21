@@ -1,10 +1,11 @@
 {
   "name": "programmer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Operate the Programmer-Wander dev shell with six skills and optional reviewed guard-hook templates.",
   "author": {
     "name": "AIWander"
   },
+  "repository": "https://github.com/AIWander/aiprogrammer",
   "skills": "./skills/",
   "interface": {
     "displayName": "Programmer",

@@ -24,6 +24,26 @@ foreach ($skill in $hookedSkills) {
         if (-not (Test-Path -LiteralPath $manifest)) { throw "Missing Codex skill manifest: $manifest" }
     }
 }
+# Manifest version alignment: Claude and Codex hosts must advertise the SAME version for the
+# same plugin, and both profiles must ship as one kit. Drift here is invisible to a host until a
+# user compares them, so assert it (the .codex-plugin manifests sat a version behind for a month).
+$manifestVersions = @{}
+foreach ($profileName in @('programmer', 'programmer-skills')) {
+    foreach ($manifestDir in @('.claude-plugin', '.codex-plugin')) {
+        $manifestPath = Join-Path $root "plugins/$profileName/$manifestDir/plugin.json"
+        if (-not (Test-Path -LiteralPath $manifestPath)) { throw "Missing plugin manifest: $manifestPath" }
+        $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+        if ($manifest.name -ne $profileName) { throw "Manifest name mismatch in $manifestPath (expected $profileName, found $($manifest.name))." }
+        if (-not $manifest.repository) { throw "Manifest is missing the repository field: $manifestPath" }
+        $manifestVersions["$profileName/$manifestDir"] = $manifest.version
+    }
+}
+$distinctVersions = @($manifestVersions.Values | Sort-Object -Unique)
+if ($distinctVersions.Count -ne 1) {
+    $detail = ($manifestVersions.GetEnumerator() | Sort-Object Name | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join ', '
+    throw "All plugin manifests must advertise one kit version but found: $detail"
+}
+
 foreach ($json in Get-ChildItem -LiteralPath $root -Recurse -File -Filter '*.json') {
     $null = Get-Content -LiteralPath $json.FullName -Raw | ConvertFrom-Json
 }
