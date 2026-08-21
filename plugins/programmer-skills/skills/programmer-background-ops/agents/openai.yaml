@@ -1,0 +1,7 @@
+interface:
+  display_name: "Programmer Background Ops"
+  short_description: "Sessions, watchers, webhooks, and WSL jobs"
+  default_prompt: "Use $programmer-background-ops for work that outlives one tool call or reacts to changes."
+
+policy:
+  allow_implicit_invocation: true

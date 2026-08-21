@@ -1,0 +1,63 @@
+PROGRAMMER-WANDER HOOK-CAPABLE PLUGIN - APPLY TO YOUR AI
+========================================================
+
+This profile carries six skills plus inert guard-hook templates. It expects an
+existing programmer MCP connection: register the server first with
+programmer.exe install --target <host>, or add one STDIO entry to your host's
+MCP configuration (back that file up first). Installing this plugin edits no
+host configuration and activates no hooks. Install only this profile or
+programmer-skills, never both.
+
+CLAUDE CODE
+-----------
+In PowerShell:
+  claude plugin marketplace add AIWander/aiprogrammer
+  claude plugin install programmer@aiprogrammer
+
+Start a fresh Claude Code session and confirm the programmer MCP tools appear.
+See docs/install/claude-code.md for server registration and verification.
+
+GROK CLI
+--------
+Grok reads the same marketplace format. Add the cloned repository as a
+marketplace source in ~/.grok/config.toml, or install the plugin directory
+directly:
+  grok plugin install "C:\path\to\cloned\aiprogrammer\plugins\programmer"
+
+Review the plugin before accepting Grok's trust prompt, then start a fresh
+session. See docs/install/grok.md.
+
+CODEX CLI OR CODEX DESKTOP
+--------------------------
+In PowerShell:
+  codex plugin marketplace add "C:\path\to\cloned\aiprogrammer"
+  codex plugin add programmer@aiprogrammer
+
+Open a fresh Codex task and confirm the programmer MCP server appears in the
+tool list. See docs/install/codex.md.
+
+CHATGPT OR ANOTHER MCP UI
+-------------------------
+If the UI supports a local STDIO MCP server, add one entry named programmer
+whose command is your installed programmer.exe path, with no arguments. You can
+paste the behavior block below into project or custom instructions, but
+instructions alone do not create tools.
+
+PASTEABLE BEHAVIOR BLOCK
+------------------------
+Before dev-shell work, load programmer-getting-started to route across the
+Files, Search, Shell, Git, Sessions, Background, Net, Data, System, Guard, and
+Plan categories, and programmer-toolmap when choosing a specific tool or an
+alternative after a failure. Use programmer-dev-loop for edit-build-test-commit
+cycles, programmer-sessions to choose between shell_session and live_shell, and
+programmer-background-ops for watchers, webhooks, WSL jobs, and work that
+outlives one tool call. Before destructive commands, overwrites, kills, or
+deploys, load programmer-safe-ops: pre-flight the command, archive before
+overwriting, stage binary swaps, and never kill a live MCP server process.
+
+OPTIONAL GUARD HOOKS
+--------------------
+The hook templates never load themselves. Read hooks/opt-in/README.md, run
+scripts/render-hooks.ps1, review the rendered JSON for your host (Claude-style,
+Grok, or Codex), merge only what you want, then prove the hook fires with a
+harmless event before treating it as enforcement.

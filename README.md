@@ -38,6 +38,7 @@ paths, release hashes, verification steps, and blocked channels.
 2. Follow the guide for
    [Claude Code](docs/install/claude-code.md),
    [Codex](docs/install/codex.md),
+   [Grok CLI](docs/install/grok.md),
    [Claude Desktop](docs/install/claude-desktop.md), or
    [LM Studio](docs/install/lm-studio.md).
 3. Add this repository through the host's plugin flow, then install exactly ONE
@@ -70,8 +71,9 @@ force-pushes, and kills aimed at running MCP servers; warns on cargo via
 PowerShell and writes into protected config roots; and audits every decision
 locally. Read `plugins/programmer/hooks/opt-in/README.md`, then run
 `plugins/programmer/scripts/render-hooks.ps1` and merge only what you want.
-Files in `plugins/programmer/rendered-hooks/` are examples - re-render for your
-own paths.
+Rendering writes host-ready JSON with your real paths into
+`plugins/programmer/rendered-hooks/` (local only, not tracked); Claude-style,
+Grok, and Codex fragments all share the one reviewed policy file.
 
 ## Upgrade
 

@@ -229,7 +229,7 @@ def check_command(event: str, cmd: str) -> tuple[str, str]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--event", required=True)
-    parser.add_argument("--host", required=True, choices=("claude", "codex"))
+    parser.add_argument("--host", required=True, choices=("claude", "codex", "grok"))
     options = parser.parse_args()
 
     try:

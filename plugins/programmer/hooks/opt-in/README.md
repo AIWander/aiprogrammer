@@ -2,8 +2,9 @@
 
 Nothing in this folder runs by itself. These are reviewed, inert templates: a
 shared Python policy (`shared/policy/programmer_hook.py`), thin host adapters
-(`adapters/claude`, `adapters/codex`), and fragments containing a
-`__PLUGIN_ROOT__` placeholder.
+(`adapters/claude`, `adapters/grok`, `adapters/codex`), and fragments containing
+a `__PLUGIN_ROOT__` placeholder. Grok CLI consumes the same Claude-style hook
+JSON shape through its own adapter so all three hosts share one policy owner.
 
 To use them:
 

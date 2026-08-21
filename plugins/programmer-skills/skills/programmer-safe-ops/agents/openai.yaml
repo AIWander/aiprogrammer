@@ -1,0 +1,7 @@
+interface:
+  display_name: "Programmer Safe Ops"
+  short_description: "Safety discipline for destructive operations"
+  default_prompt: "Use $programmer-safe-ops before destructive commands, overwrites, kills, or deploys."
+
+policy:
+  allow_implicit_invocation: true

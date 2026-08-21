@@ -10,9 +10,12 @@
 #>
 [CmdletBinding()]
 param(
-  [string]$PluginRoot = (Split-Path -Parent $PSScriptRoot)
+  [string]$PluginRoot
 )
 $ErrorActionPreference = 'Stop'
+if (-not $PluginRoot) {
+  $PluginRoot = Split-Path -Parent $PSScriptRoot
+}
 
 $root = (Resolve-Path $PluginRoot).Path -replace '\\', '/'
 $outDir = Join-Path $PluginRoot 'rendered-hooks'

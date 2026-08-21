@@ -1,0 +1,7 @@
+interface:
+  display_name: "Programmer Dev Loop"
+  short_description: "Edit, build, test, and commit with Programmer tools"
+  default_prompt: "Use $programmer-dev-loop to run the edit-build-test-commit cycle here."
+
+policy:
+  allow_implicit_invocation: true

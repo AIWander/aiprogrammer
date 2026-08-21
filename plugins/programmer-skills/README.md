@@ -4,7 +4,9 @@ Skill-only profile: the same six skills as the `programmer` profile with no
 hook code of any kind. For hosts or users that do not want lifecycle hooks.
 
 - `skills/` - programmer-getting-started, programmer-toolmap,
-  programmer-dev-loop, programmer-background-ops, programmer-safe-ops
+  programmer-dev-loop, programmer-background-ops, programmer-safe-ops,
+  programmer-sessions (each with an `agents/openai.yaml` Codex adapter)
+- `instructions/APPLY_TO_YOUR_AI.txt` - per-client activation guidance
 
 Expects an existing `programmer` MCP connection
 (`programmer.exe install --target <host>`). Install exactly one profile -

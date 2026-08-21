@@ -1,0 +1,7 @@
+interface:
+  display_name: "Programmer Sessions"
+  short_description: "Choose between shell_session and live_shell"
+  default_prompt: "Use $programmer-sessions to pick the right shell surface for multi-command work."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Programmer Tool Map"
+  short_description: "Full Programmer tool reference by category"
+  default_prompt: "Use $programmer-toolmap to find which Programmer tool fits this task or an alternative after a failure."
+
+policy:
+  allow_implicit_invocation: true
