@@ -18,16 +18,32 @@ foreach ($skill in $hookedSkills) {
     if ((Get-FileHash $left).Hash -ne (Get-FileHash $right).Hash) { throw "Profile skill mismatch: $($skill.Name)" }
     $parts = (Get-Content -LiteralPath $left -Raw) -split '(?m)^---\s*$', 3
     if ($parts.Count -lt 3 -or $parts[1] -notmatch '(?m)^name:\s*\S+' -or $parts[1] -notmatch '(?m)^description:\s*\S+') { throw "Invalid skill frontmatter: $left" }
+    # Codex reads per-skill agents/openai.yaml; a missing one silently drops the skill on that host.
+    foreach ($profileSkills in @($hooked, $plain)) {
+        $manifest = Join-Path (Join-Path $profileSkills $skill.Name) 'agents/openai.yaml'
+        if (-not (Test-Path -LiteralPath $manifest)) { throw "Missing Codex skill manifest: $manifest" }
+    }
 }
 foreach ($json in Get-ChildItem -LiteralPath $root -Recurse -File -Filter '*.json') {
     $null = Get-Content -LiteralPath $json.FullName -Raw | ConvertFrom-Json
 }
+# Host census, exact and intentional like the skill count above: add the host here when a new
+# adapter ships, so a dropped fragment fails the build instead of silently narrowing host coverage.
+$expectedFragments = @('claude-hooks.fragment.json', 'codex-hooks.fragment.json', 'grok-hooks.fragment.json')
 $fragments = @(Get-ChildItem -LiteralPath (Join-Path $root 'plugins/programmer/hooks/opt-in') -File -Filter '*hooks.fragment.json')
-if ($fragments.Count -ne 2) { throw 'Expected Claude and Codex opt-in hook fragments.' }
+$fragmentNames = @($fragments.Name | Sort-Object)
+if (Compare-Object $fragmentNames ($expectedFragments | Sort-Object)) {
+    throw "Expected opt-in hook fragments $($expectedFragments -join ', ') but found $($fragmentNames -join ', ')."
+}
+foreach ($fragment in $fragments) {
+    $host_ = $fragment.Name -replace '-hooks\.fragment\.json$', ''
+    $adapter = Join-Path $root "plugins/programmer/hooks/opt-in/adapters/$host_/hook_adapter.py"
+    if (-not (Test-Path -LiteralPath $adapter)) { throw "Hook fragment $($fragment.Name) has no adapter at $adapter" }
+}
 foreach ($fragment in $fragments) {
     if ((Get-Content -LiteralPath $fragment.FullName -Raw) -notmatch '__PLUGIN_ROOT__') { throw "Hook fragment is not portable: $($fragment.Name)" }
 }
 foreach ($file in Get-ChildItem -LiteralPath $root -Recurse -File | Where-Object Extension -in '.md','.py','.ps1','.json','.yml','.yaml') {
     if ((Get-Content -LiteralPath $file.FullName -Raw) -match '[\uD83C-\uDBFF][\uDC00-\uDFFF]') { throw "Emoji or supplementary glyph found: $($file.FullName)" }
 }
-Write-Host 'Repository validation passed: JSON, skill frontmatter, profile parity, inert hook tokens, and no-emoji policy.'
+Write-Host 'Repository validation passed: JSON, skill frontmatter, profile parity, Codex skill manifests, host fragment/adapter census, inert hook tokens, and no-emoji policy.'
