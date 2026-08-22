@@ -5,7 +5,8 @@ Release readiness requires evidence at five separate layers:
 1. The expected release asset hash and Authenticode signature pass.
 2. The host config contains the intended command and no unrelated changes.
 3. MCP `initialize` returns the expected server name and version.
-4. `tools/list` returns 105 tools in the 11 documented categories.
+4. `tools/list` returns the documented tool count for the release under test
+   (`v0.2.0-alpha`: 105 tools in 11 categories; v2.0: 49 tools in 10).
 5. Uninstall removes only Programmer and preserves every pre-existing config
    entry and every backup.
 

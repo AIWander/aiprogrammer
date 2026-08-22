@@ -24,10 +24,11 @@ server code changes happen THERE, plugin-kit changes happen HERE.
   tools/list changes (count, categories, names), update `programmer-toolmap`
   and the counts in every skill + README in the same commit.
 
-## Current state (as of seeding, 2026-07-18)
+## Current state (seeded 2026-07-18; server line updated 2026-08-21)
 
-- Server: Programmer-Wander 0.2.0-alpha - 105 tools, 11 categories, every
-  description prefixed `[Category]`, icon-embedded signed exe.
+- Server: v2.0 - 49 tools in 10 categories, plain tool descriptions. The seeded
+  `0.2.0-alpha` surface was 105 tools in 11 categories with every description
+  prefixed `[Category]` - that alias layer was retired in the 2026-07-29 rebuild.
 - Kit: six skills + guard-hook policy (tested 7/7 scenarios) + dual profiles
   + `.agents/plugins/marketplace.json`.
 - Product model: Programmer free forever; UniMan is the $5 paid upgrade

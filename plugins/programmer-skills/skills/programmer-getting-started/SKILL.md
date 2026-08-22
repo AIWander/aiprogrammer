@@ -1,30 +1,34 @@
 ---
 name: programmer-getting-started
-description: Orientation for the Programmer-Wander MCP server - a single-binary Rust + Windows dev shell with ~105 tools organized into 11 categories (Files, Search, Shell, Git, Sessions, Background, Net, Data, System, Guard, Plan). Surface when programmer is registered in the host, when picking a tool for file I/O, shells, git, WSL, HTTP, watchers, webhooks, or transforms, when choosing between programmer and an alternative MCP server, or when answering "how do I do X with programmer".
+description: Orientation for the Programmer MCP server - a single-binary Rust + Windows dev shell with 49 tools in 10 categories (Files, Shell, Sessions, Search, System, WSL, Transforms + Stats, Net, Guard, Infra + Meta). Surface when programmer is registered in the host, when picking a tool for file I/O, shells, git, WSL, HTTP, watchers, webhooks, or transforms, when choosing between programmer and an alternative MCP server, or when answering "how do I do X with programmer".
 ---
 
 # Programmer - Getting Started
 
-Programmer-Wander is **the dev shell on this Windows machine**: one static-linked
-`programmer.exe`, no external dependencies, no other servers required. Every tool
-description is prefixed with its category tag, so a flat tool list still reads
-grouped:
+Programmer is **the dev shell on this Windows machine**: one static-linked
+`programmer.exe`, no external dependencies, no other servers required. The v2.0
+surface is 49 tools in 10 categories:
 
-| Tag | What lives there |
+| Category | What lives there (7/5/2/1/5/4/14/2/2/7 tools) |
 |---|---|
-| `[Files]` | read/write/append/edit_block, copy/move, dirs, diff, tail, stats |
-| `[Search]` | grep, search_file, search_start, smart_read |
-| `[Shell]` | bash, powershell, run, chain, smart_exec, shortcuts |
-| `[Git]` | full git - status through clone/push/stash/remote |
-| `[Sessions]` | persistent shells (psession_*) + tracked sessions with recovery |
-| `[Background]` | file watchers, webhooks, WSL background jobs |
-| `[Net]` | http_request/download/scrape, port_check |
-| `[Data]` | transforms (json/csv/base64/hash/rename/scaffold), archives, sqlite, md2docx |
-| `[System]` | screenshot, clipboard, processes, registry, notify |
-| `[Guard]` | security_check_cmd, audit log, deploy_preflight, tool_fallback |
-| `[Plan]` | plan, plan_assemble |
+| Files | `read_file`, `write_file`, `edit_block`, `copy_file`, `move_file`, `create_dir`, `list_dir` |
+| Shell | `bash`, `powershell`, `shortcut`, `list_process`, `kill_process` |
+| Sessions | `shell_session` (remembered cwd/env), `live_shell` (real REPL process) |
+| Search | `search_file` |
+| System | `screenshot`, `system_info`, `clipboard_read`, `clipboard_write`, `md2docx` |
+| WSL | `wsl_run`, `wsl_bg`, `wsl_log`, `wsl_status` |
+| Transforms + Stats | `grep`, `json`, `base64`, `convert`, `file_stats`, `diff_file`, archives, `transform_*` |
+| Net | `http_request`, `port_check` |
+| Guard | `security_check_cmd`, `security_audit_log` |
+| Infra + Meta | `server_health`, `doctor`, `deploy_preflight`, `config_validate_mcp`, `plan`, `sqlite_query`, `registry_read` |
 
 Full per-tool reference: see the `programmer-toolmap` skill.
+
+The 2026-07-29 v2.0 rebuild retired the legacy alias layer and moved non-dev-shell
+capabilities out: git to the gitplus add-on server, watchers and webhooks to
+autonomous, scraping to hands. If you are driving the retired v0.2.0-alpha release
+instead, it exposes a larger legacy surface whose descriptions carry `[Category]`
+prefixes; check `tools/list` when the two disagree.
 
 ## Offload posture
 
@@ -34,10 +38,11 @@ builds. Local compute does the I/O; the model's tokens do the reasoning.
 
 ## First moves
 
-- One-off command: `run` (simple) or `bash` (Git Bash - use for cargo, jq, here-docs)
+- One-off command: `bash` (Git Bash - use for cargo, jq, here-docs)
 - Windows-specific cmdlets/ACLs/CIM: `powershell`
 - Surgical code edit: `edit_block` (never `write_file` for edits)
-- Long build: `psession_create` then `psession_run` then `psession_read`
+- Long build: `shell_session` (action `create`, then `run`, then `read`)
+- Interactive REPL that keeps variables in memory: `live_shell`
 - Linux from Windows: `wsl_run`, or `wsl_bg` + `wsl_log` for long jobs
 
 ## When NOT to use programmer

@@ -10,7 +10,7 @@
   "interface": {
     "displayName": "Programmer Skills",
     "shortDescription": "Programmer-Wander dev-shell skills, no hooks.",
-    "longDescription": "Skill-only profile for the Programmer-Wander MCP server: orientation, the full organized toolmap (105 tools in 11 categories), the edit-build-test-commit loop, background operations, and safety discipline. Contains no hook code of any kind.",
+    "longDescription": "Skill-only profile for the Programmer-Wander MCP server: orientation, the full organized toolmap (49 tools in 10 categories), the edit-build-test-commit loop, background operations, and safety discipline. Contains no hook code of any kind.",
     "developerName": "AIWander",
     "category": "Developer Tools",
     "capabilities": ["dev-shell orientation", "organized tool reference", "dev-loop guidance", "background-ops guidance", "safety discipline"],

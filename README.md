@@ -6,10 +6,12 @@
 
 **Site:** [aiprogrammer.ai](https://aiprogrammer.ai)
 
-Programmer-Wander is a single signed binary exposing 105 tools in 11 organized
-categories (Files, Search, Shell, Git, Sessions, Background, Net, Data, System,
-Guard, Plan). This repository is the plugin kit that teaches an AI host how to
-use it well - and, optionally, how to guard it.
+Programmer-Wander is a single signed binary exposing a Rust + Windows dev shell.
+The v2.0 surface is 49 tools in 10 organized categories (Files, Shell, Sessions,
+Search, System, WSL, Transforms + Stats, Net, Guard, Infra + Meta); the earlier
+`v0.2.0-alpha` release exposed 105 tools in 11 categories. This repository is the
+plugin kit that teaches an AI host how to use it well - and, optionally, how to
+guard it.
 
 ## Install status
 
