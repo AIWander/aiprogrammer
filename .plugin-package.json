@@ -1,0 +1,11 @@
+{
+  "marketplaceName": "aiprogrammer",
+  "marketplaces": [".claude-plugin/marketplace.json", ".agents/plugins/marketplace.json"],
+  "advertisedProfiles": ["programmer", "programmer-skills"],
+  "profiles": {
+    "programmer": { "skills": 6, "mcp": false, "hookHosts": ["claude", "codex", "grok"] },
+    "programmer-skills": { "skills": 6, "mcp": false, "hookHosts": [] }
+  },
+  "parityGroups": [["programmer", "programmer-skills"]],
+  "notes": "mcp=false is deliberate: the programmer server is registered separately, so the plugin cannot double-spawn it."
+}

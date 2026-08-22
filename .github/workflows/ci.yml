@@ -19,3 +19,6 @@ jobs:
       - name: Validate repository contracts
         shell: pwsh
         run: ./scripts/validate-repository.ps1
+      - name: Validate shared plugin-package contract
+        shell: pwsh
+        run: ./scripts/validate-plugin-package.ps1
