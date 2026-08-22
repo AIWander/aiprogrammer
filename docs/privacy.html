@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy - AIProgrammer</title>
+<meta name="description" content="Privacy boundaries for the AIProgrammer website, Programmer-Wander local runtime, host logs, network tools, and local state.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://aiprogrammer.ai/privacy.html">
+<link rel="icon" href="favicon.ico">
+<style>
+  :root { color-scheme:dark; --bg:#070b16; --panel:#0e1526; --ink:#e6ecf5; --dim:#9aa9be; --line:#22304f; --cyan:#22d3ee; --amber:#f5a623; --mono:"Cascadia Mono",Consolas,monospace; }
+  * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.65 "Segoe UI",Arial,sans-serif; }
+  a { color:var(--cyan); } .wrap { max-width:900px; margin:auto; padding:24px; } header { border-bottom:1px solid var(--line); }
+  nav { display:flex; flex-wrap:wrap; gap:10px 22px; align-items:center; } nav strong { margin-right:auto; font-family:var(--mono); }
+  main { padding:42px 0 70px; } h1,h2 { font-family:var(--mono); line-height:1.2; } h1 { font-size:clamp(32px,6vw,48px); }
+  h2 { margin-top:42px; font-size:23px; } p,li { color:var(--dim); } strong { color:var(--ink); }
+  .callout { padding:18px 20px; border-left:3px solid var(--amber); background:rgba(245,166,35,.08); }
+  footer { border-top:1px solid var(--line); color:var(--dim); font-size:14px; padding:24px 0; }
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav aria-label="Primary"><strong>AIProgrammer</strong><a href="index.html">Home</a><a href="trust.html">Trust</a><a href="support.html">Support</a><a href="uninstall.html">Uninstall</a></nav></div></header>
+<main><div class="wrap">
+  <h1>Privacy boundaries</h1>
+  <p class="callout"><strong>Short version:</strong> the site is static and the Programmer runtime is local, but your MCP host, operating system, network tools, and hosting providers remain separate data surfaces.</p>
+
+  <h2>This website</h2>
+  <p>The published site files contain no account system, form, advertising tag, first-party analytics, cookie-setting script, or third-party font/script request. The infrastructure serving the site may still process ordinary request data such as IP address, user agent, requested URL, and timestamp under its own operational policies. Following a GitHub link transfers you to GitHub.</p>
+
+  <h2>The Programmer runtime</h2>
+  <p>Programmer-Wander runs as a local MCP server. Its current source defaults telemetry to off. That does not mean it is unable to handle sensitive data: its purpose is to expose local file, shell, git, process, screenshot, clipboard, data, and network capabilities when your host invokes them.</p>
+  <ul>
+    <li>Your AI host may retain prompts, tool calls, approvals, outputs, or transcripts under the host's own settings.</li>
+    <li>HTTP, download, scraping, webhook, git, and shell tools can create network traffic when invoked or configured.</li>
+    <li>Files and command output remain subject to the permissions of the operating-system account running the host.</li>
+    <li>Do not place credentials or private data in public issues. Use an operating-system secret store for credentials.</li>
+  </ul>
+
+  <h2>Local state and deletion</h2>
+  <p>The release documentation describes portable state in a <code>.programmer</code> folder beside the executable. Individual tools can also create logs, checkpoints, downloads, repositories, or output at paths you select. Your host may keep separate logs. Unregistering the MCP server does not prove those files or host records were erased; follow the <a href="uninstall.html">uninstall and data-removal checklist</a>.</p>
+
+  <h2>Separate products</h2>
+  <p>UniMan, Voice, AIWander, GitHub, and each MCP host are separate products or services. This page does not silently extend to their accounts, logs, retention, support, or uninstall behavior.</p>
+</div></main>
+<footer><div class="wrap">AIProgrammer privacy boundary - last reviewed July 23, 2026.</div></footer>
+</body>
+</html>

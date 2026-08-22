@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uninstall - AIProgrammer</title>
+<meta name="description" content="How to unregister Programmer-Wander, remove the installed or portable binary, review local state, and separately remove plugin or hook configuration.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://aiprogrammer.ai/uninstall.html">
+<link rel="icon" href="favicon.ico">
+<style>
+  :root { color-scheme:dark; --bg:#070b16; --panel:#0e1526; --ink:#e6ecf5; --dim:#9aa9be; --line:#22304f; --cyan:#22d3ee; --amber:#f5a623; --mono:"Cascadia Mono",Consolas,monospace; }
+  * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.65 "Segoe UI",Arial,sans-serif; }
+  a { color:var(--cyan); } .wrap { max-width:900px; margin:auto; padding:24px; } header { border-bottom:1px solid var(--line); }
+  nav { display:flex; flex-wrap:wrap; gap:10px 22px; align-items:center; } nav strong { margin-right:auto; font-family:var(--mono); }
+  main { padding:42px 0 70px; } h1,h2 { font-family:var(--mono); line-height:1.2; } h1 { font-size:clamp(32px,6vw,48px); }
+  h2 { margin-top:42px; font-size:23px; } p,li { color:var(--dim); } strong { color:var(--ink); }
+  .callout { padding:18px 20px; border-left:3px solid var(--amber); background:rgba(245,166,35,.08); }
+  pre { padding:16px; overflow-x:auto; border:1px solid var(--line); border-radius:9px; background:var(--panel); color:var(--ink); font:13px/1.65 var(--mono); }
+  footer { border-top:1px solid var(--line); color:var(--dim); font-size:14px; padding:24px 0; }
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav aria-label="Primary"><strong>AIProgrammer</strong><a href="index.html">Home</a><a href="trust.html">Trust</a><a href="privacy.html">Privacy</a><a href="support.html">Support</a></nav></div></header>
+<main><div class="wrap">
+  <h1>Unregister first. Remove files second.</h1>
+  <p class="callout"><strong>Important:</strong> server registration, the installed binary, local state, plugin profiles, rendered hooks, and host transcripts are separate surfaces. Removing one does not prove the others are gone.</p>
+
+  <h2>1. Unregister the server</h2>
+  <p>While <code>programmer.exe</code> is still available, run the exact target you installed:</p>
+  <pre>programmer.exe uninstall --target claude-desktop
+programmer.exe uninstall --target claude-code
+programmer.exe uninstall --target lm-studio
+
+# Or unregister the three explicit CLI targets:
+programmer.exe uninstall --target all</pre>
+  <p>The current CLI does not accept <code>cowork</code> or a generic host target. For a manually configured host, remove only the <code>programmer</code> MCP entry using that host's documented configuration flow. Restart each affected host and confirm the Programmer tools no longer appear.</p>
+
+  <h2>2. Remove the program</h2>
+  <ul>
+    <li><strong>Setup installer:</strong> use Windows Installed apps to uninstall Programmer-Wander after host registration has been removed.</li>
+    <li><strong>Portable zip:</strong> after unregistering and backing up anything you need, remove the extracted Programmer folder.</li>
+  </ul>
+
+  <h2>3. Decide what to do with local state</h2>
+  <p>Inspect the <code>.programmer</code> folder beside a portable executable before removing it. It may contain session, watcher, recovery, or audit state you want to retain. Tools may also have created checkpoints, logs, downloads, repositories, or output in paths you selected. Delete those only after you identify the exact paths and decide they are no longer needed.</p>
+
+  <h2>4. Remove optional plugin and hook configuration separately</h2>
+  <p>The <code>programmer</code> and <code>programmer-skills</code> profiles are separate from the server registration. Remove the installed profile through the host's plugin flow. If you previously rendered and merged opt-in hook fragments, review the host's hook configuration and remove only the Programmer-owned entries. Example files in the repository are inert and do not need runtime cleanup.</p>
+
+  <h2>5. Check host-owned records</h2>
+  <p>Your AI host may retain transcripts, tool-call logs, approvals, or cached configuration under its own retention controls. Programmer's uninstall command does not erase those records. Follow the host's privacy and deletion controls if you want them removed.</p>
+</div></main>
+<footer><div class="wrap">AIProgrammer uninstall boundary - last reviewed July 23, 2026.</div></footer>
+</body>
+</html>
