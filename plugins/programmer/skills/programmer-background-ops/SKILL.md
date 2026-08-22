@@ -1,24 +1,29 @@
 ---
 name: programmer-background-ops
-description: Long-running and event-driven work with Programmer-Wander - persistent shell sessions, WSL background jobs, filesystem watchers, local webhooks, and delta log polling. Surface when a task runs longer than one tool call, needs to react to file changes or HTTP callbacks, or spans Windows and WSL.
+description: Long-running work with Programmer - state-carrying shell sessions, live REPL shells, and WSL background jobs. Surface when a task runs longer than one tool call, needs state to persist across calls, or spans Windows and WSL. Watches, webhooks, and log tailing left this server in the v2.0 rebuild; this skill says where they went.
 ---
 
 # Programmer Background Ops
 
-## Persistent shells (psession)
+## Sessions that keep state
 
-State - variables, CWD, environment - survives across MCP calls.
+Two tools, one distinction: `shell_session` remembers cwd and environment and
+applies them to each fresh command; `live_shell` is a real long-lived process
+holding a REPL with in-memory variables. Both take an `action` argument rather
+than separate per-verb tools.
 
 ```
-psession_create              (PowerShell or WSL flavor)
-psession_run "cmd"           (repeat as needed; state persists)
-psession_read                (output buffer)
-psession_history             (command log)
-psession_destroy             (always clean up)
+shell_session  action=create              (PowerShell or WSL flavor)
+shell_session  action=run    "cmd"        (repeat; cwd and env persist)
+shell_session  action=read                (recent output)
+shell_session  action=cd | env | history
+shell_session  action=destroy             (always clean up)
 ```
 
-Use for: multi-step builds, REPL-ish exploration, anything where `cd` or an
-env var must stick.
+Use `shell_session` for multi-step builds and anything where `cd` or an env var
+must stick. Use `live_shell` when the process itself must stay alive - a REPL,
+an interactive prompt, or incremental reads from one running shell. The
+`programmer-sessions` skill carries the full decision rule.
 
 ## WSL background jobs
 
@@ -30,39 +35,28 @@ wsl_log job_id                (full or partial log)
 
 One-shot Linux commands: `wsl_run` (returns summary + log path).
 
-## Filesystem watchers
+## What is no longer here
 
-```
-watch_resource path           -> watch id
-get_alert                     (fired events)
-list_watch / stop_watch
-```
+The v2.0 rebuild moved event-driven work off the dev shell. Do not reach for
+these on `programmer` - they are not in its tool list:
 
-Pattern: watch a config or artifact dir, react on change
-(`read_file` -> process -> `notify`). Always `stop_watch` when the task ends -
-orphaned watchers keep firing.
+| Need | Server | Tool |
+|---|---|---|
+| React to file changes | autonomous | `pulse_watch` |
+| Receive an HTTP callback | autonomous | `pulse_webhook` |
+| Desktop notification | local | `notify` |
+| Page scraping | hands | `browser_http_scrape` |
 
-## Local webhooks
-
-```
-webhook_add_route -> webhook_start -> (external system calls in) -> webhook_stop
-```
-
-Use for OAuth callbacks and CI pings during development. Loopback only; do not
-expose routes beyond localhost.
-
-## Delta log polling
-
-`tail_file` returns the last N lines plus a byte offset. Pass `since_bytes`
-from the previous call to get only NEW content - the cheap way to follow a
-growing log without re-reading it.
+Delta log polling did not disappear, it moved inside `read_file`: pass `tail=N`
+for the last N lines, then feed the returned `since_bytes` back on the next call
+to read only what was appended. For WSL jobs, poll `wsl_log` instead.
 
 ## Choosing the shape
 
 | Situation | Tool |
 |---|---|
-| State must persist across calls | `psession_*` |
+| State must persist across calls | `shell_session` |
+| Interactive REPL, variables in memory | `live_shell` |
 | Long Linux job, poll later | `wsl_bg` + `wsl_log` |
-| React to file changes | `watch_resource` + `get_alert` |
-| Receive an HTTP callback | `webhook_*` |
-| Follow a log file | `tail_file` with `since_bytes` |
+| React to file changes | autonomous `pulse_watch` |
+| Receive an HTTP callback | autonomous `pulse_webhook` |

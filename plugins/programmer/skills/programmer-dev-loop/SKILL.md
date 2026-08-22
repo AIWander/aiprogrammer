@@ -12,9 +12,12 @@ read_file (grep first if large)
   -> edit_block            (surgical, atomic; one logical change per call)
   -> bash "cargo build"    (or the project's build command)
   -> bash "cargo test"
-  -> git_diff              (review what actually changed)
-  -> git_commit
+  -> bash "git diff"       (review what actually changed)
+  -> bash "git commit"
 ```
+
+Git left the dev shell in the v2.0 rebuild. Drive it through `bash`, or use the
+`gitplus` add-on server's `git_*` tools when that server is registered.
 
 ## Rust on Windows - the rules that bite
 
@@ -34,26 +37,26 @@ read_file (grep first if large)
 
 ## Long builds
 
-Blocking `run`/`bash` calls time out on big builds. Use a persistent session:
+Blocking `bash` calls time out on big builds. Use a state-carrying session:
 
 ```
-psession_create
-psession_run "cargo build --release 2>&1 | tail -20"
-psession_read          (poll until done)
-psession_history       (audit what ran)
-psession_destroy
+shell_session  action=create
+shell_session  action=run     "cargo build --release 2>&1 | tail -20"
+shell_session  action=read     (poll until done)
+shell_session  action=history  (audit what ran)
+shell_session  action=destroy
 ```
 
 ## Review before commit
 
-`git_diff_summary` for the shape, `git_diff` for content, then `git_commit`
+`git diff --stat` for the shape, `git diff` for content, then `git commit`
 with a message that says why, not just what. Push is a separate decision -
-`git_push` publishes; confirm intent before pushing to shared branches.
+`git push` publishes; confirm intent before pushing to shared branches.
 
 ## Clone-modify-push-back
 
 ```
-git_clone -> edit_block (x N) -> git_status -> git_diff -> git_commit -> git_push
+git clone -> edit_block (x N) -> git status -> git diff -> git commit -> git push
 ```
 
 ## Scaffolding

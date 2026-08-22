@@ -9,8 +9,8 @@ Programmer is a full dev shell. These rules keep it reversible.
 
 ## Command pre-flight
 
-Command-entry tools (`run`, `bash`, `powershell`, `smart_exec`, `chain`,
-`psession_run`, `wsl_run`, `wsl_bg`) pass through `security_check_cmd`
+Command-entry tools (`bash`, `powershell`, `shell_session`, `live_shell`,
+`wsl_run`, `wsl_bg`) pass through `security_check_cmd`
 automatically. Critical destructive patterns are blocked and logged; recursive
 deletes must target an obviously disposable path (`target/`, `build/`, `tmp/`,
 `.cache/`). To check a command before running it, call `security_check_cmd`
