@@ -50,8 +50,8 @@ Files, Search, Shell, Git, Sessions, Background, Net, Data, System, Guard, and
 Plan categories, and programmer-toolmap when choosing a specific tool or an
 alternative after a failure. Use programmer-dev-loop for edit-build-test-commit
 cycles, programmer-sessions to choose between shell_session and live_shell, and
-programmer-background-ops for watchers, webhooks, WSL jobs, and work that
-outlives one tool call. Before destructive commands, overwrites, kills, or
+programmer-background-ops for WSL jobs, state-carrying sessions, and work
+that outlives one tool call. Before destructive commands, overwrites, kills, or
 deploys, load programmer-safe-ops: pre-flight the command, archive before
 overwriting, stage binary swaps, and never kill a live MCP server process.
 

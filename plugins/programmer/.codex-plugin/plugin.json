@@ -13,7 +13,7 @@
     "longDescription": "Use an existing programmer MCP connection as a full Rust + Windows dev shell: 49 tools in 10 categories covering files, search, shells, persistent sessions, WSL, HTTP, transforms, system access, safety guards, and planning. Optional inert hook templates add destructive-command denial, MCP-server-kill protection, and archive-first warnings after user review.",
     "developerName": "AIWander",
     "category": "Developer Tools",
-    "capabilities": ["file and code editing", "shell and persistent sessions", "full git", "WSL and background jobs", "watchers and webhooks", "safety guard hooks"],
+    "capabilities": ["file and code editing", "shell and state-carrying sessions", "live REPL shells", "WSL commands and background jobs", "transforms and archives", "safety guard hooks"],
     "defaultPrompt": [
       "Fix this bug and commit the change.",
       "Build the project and show me the errors.",

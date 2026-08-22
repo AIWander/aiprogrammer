@@ -22,7 +22,7 @@ What the policy does:
 | PreToolUse (command tools) | Deny disk-destroying patterns, recursive deletes outside disposable paths, bare force-pushes, and commands that kill MCP server processes; warn on cargo via powershell |
 | PreToolUse (kill_process) | Deny kills aimed at live MCP server executables |
 | PreToolUse (write tools) | Warn (archive-first) on writes under protected config roots |
-| PostToolUseFailure | Hint at tool_fallback / smart_exec / security_audit_log |
+| PostToolUseFailure | 3-strike fallback advisor: after the same tool+target fails three times in the window, inject the recorded fallback (replaces the retired tool_fallback tool) |
 
 Every decision is appended to `%LOCALAPPDATA%/ProgrammerWander/hooks/audit.jsonl`.
 The policy requires Python 3.10+ on PATH. It never blocks silently: a denial

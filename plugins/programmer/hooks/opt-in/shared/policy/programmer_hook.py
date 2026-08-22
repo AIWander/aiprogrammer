@@ -18,9 +18,15 @@ import sys
 from pathlib import Path
 from typing import Any
 
+# Every v2.0 tool that can execute an arbitrary command string. Keep this list
+# aligned with a live tools/list: a real command tool missing from it skips the
+# destructive-command pre-flight entirely. The v2.0 rebuild retired run, chain,
+# psession_run and smart_exec (the last survives only in the Local-LLM build) and
+# introduced shell_session and live_shell, which take a "command" argument just
+# like bash does - they were unguarded until 2026-08-22.
 COMMAND_TOOLS = {
-    "run", "bash", "powershell", "smart_exec", "chain",
-    "psession_run", "wsl_run", "wsl_bg",
+    "bash", "powershell", "wsl_run", "wsl_bg",
+    "shell_session", "live_shell",
 }
 WRITE_TOOLS = {
     "write_file", "edit_block", "move_file", "copy_file",
@@ -60,8 +66,13 @@ def tool_name(payload: dict[str, Any]) -> str:
 
 
 def base_tool(payload: dict[str, Any]) -> str:
-    """Strip mcp__programmer__ style prefixes down to the bare tool name."""
-    return tool_name(payload).split("__")[-1]
+    """Strip mcp__programmer__ style prefixes down to the bare tool name.
+
+    Casefolded deliberately: the guard matches against lowercase sets, so an
+    unnormalized name like mcp__programmer__Powershell missed every set and
+    executed unguarded. Normalizing here closes that bypass for all callers.
+    """
+    return tool_name(payload).split("__")[-1].strip().lower()
 
 
 def tool_args(payload: dict[str, Any]) -> dict[str, Any]:

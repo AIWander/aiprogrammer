@@ -1,6 +1,6 @@
 ---
 name: programmer-getting-started
-description: Orientation for the Programmer MCP server - a single-binary Rust + Windows dev shell with 49 tools in 10 categories (Files, Shell, Sessions, Search, System, WSL, Transforms + Stats, Net, Guard, Infra + Meta). Surface when programmer is registered in the host, when picking a tool for file I/O, shells, git, WSL, HTTP, watchers, webhooks, or transforms, when choosing between programmer and an alternative MCP server, or when answering "how do I do X with programmer".
+description: Orientation for the Programmer MCP server - a single-binary Rust + Windows dev shell with 49 tools in 10 categories (Files, Shell, Sessions, Search, System, WSL, Transforms + Stats, Net, Guard, Infra + Meta). Surface when programmer is registered in the host, when picking a tool for file I/O, shells, sessions, WSL, HTTP, or transforms, when choosing between programmer and an alternative MCP server, or when answering "how do I do X with programmer".
 ---
 
 # Programmer - Getting Started

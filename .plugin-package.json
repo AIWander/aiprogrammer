@@ -1,11 +1,42 @@
 {
   "marketplaceName": "aiprogrammer",
-  "marketplaces": [".claude-plugin/marketplace.json", ".agents/plugins/marketplace.json"],
-  "advertisedProfiles": ["programmer", "programmer-skills"],
+  "marketplaces": [
+    ".claude-plugin/marketplace.json",
+    ".agents/plugins/marketplace.json"
+  ],
+  "advertisedProfiles": [
+    "programmer",
+    "programmer-skills"
+  ],
   "profiles": {
-    "programmer": { "skills": 6, "mcp": false, "hookHosts": ["claude", "codex", "grok"] },
-    "programmer-skills": { "skills": 6, "mcp": false, "hookHosts": [] }
+    "programmer": {
+      "skills": 6,
+      "mcp": false,
+      "hookHosts": [
+        "claude",
+        "codex",
+        "grok"
+      ]
+    },
+    "programmer-skills": {
+      "skills": 6,
+      "mcp": false,
+      "hookHosts": []
+    }
   },
-  "parityGroups": [["programmer", "programmer-skills"]],
-  "notes": "mcp=false is deliberate: the programmer server is registered separately, so the plugin cannot double-spawn it."
+  "parityGroups": [
+    [
+      "programmer",
+      "programmer-skills"
+    ]
+  ],
+  "notes": "mcp=false is deliberate: the programmer server is registered separately, so the plugin cannot double-spawn it. retiredCapabilityTerms names capability the v2.0 rebuild moved out (git to gitplus, watches/webhooks to autonomous, scraping to hands); they are banned from advertising and trigger fields only, never from body prose that explains where they went.",
+  "retiredCapabilityTerms": [
+    "watchers and webhooks",
+    "full git",
+    "smart_exec",
+    "psession_",
+    "tail_file",
+    "watch_resource"
+  ]
 }
