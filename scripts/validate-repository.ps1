@@ -38,6 +38,32 @@ foreach ($profileName in @('programmer', 'programmer-skills')) {
         $manifestVersions["$profileName/$manifestDir"] = $manifest.version
     }
 }
+
+# Single source of truth for version: the plugin manifests. Both marketplaces must describe the
+# same set of profiles but must NOT restate a version - a duplicated value drifts silently and is
+# only noticed when a user compares the storefront against the installed plugin (it sat a minor
+# version behind for weeks). Assert the duplicate cannot come back rather than keeping it in sync.
+$marketplaceFiles = @(
+    (Join-Path $root ".claude-plugin/marketplace.json"),
+    (Join-Path $root ".agents/plugins/marketplace.json")
+)
+foreach ($marketplacePath in $marketplaceFiles) {
+    if (-not (Test-Path -LiteralPath $marketplacePath)) { throw "Missing marketplace file: $marketplacePath" }
+    $marketplace = Get-Content -LiteralPath $marketplacePath -Raw | ConvertFrom-Json
+    $entryNames = @($marketplace.plugins | ForEach-Object { $_.name } | Sort-Object)
+    $expectedNames = @("programmer", "programmer-skills")
+    if (Compare-Object $entryNames $expectedNames) {
+        throw "$marketplacePath advertises [$($entryNames -join ', ')] but the repo ships [$($expectedNames -join ', ')]."
+    }
+    foreach ($entry in $marketplace.plugins) {
+        if ($entry.PSObject.Properties.Name -contains "version") {
+            throw "$marketplacePath entry '$($entry.name)' restates a version; the plugin manifest is the only source of truth."
+        }
+        $sourcePath = if ($entry.source -is [string]) { $entry.source } else { $entry.source.path }
+        $resolved = Join-Path $root ($sourcePath -replace "^\./", "")
+        if (-not (Test-Path -LiteralPath $resolved)) { throw "$marketplacePath entry '$($entry.name)' points at a missing source: $sourcePath" }
+    }
+}
 $distinctVersions = @($manifestVersions.Values | Sort-Object -Unique)
 if ($distinctVersions.Count -ne 1) {
     $detail = ($manifestVersions.GetEnumerator() | Sort-Object Name | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join ', '

@@ -9,7 +9,6 @@
       "name": "programmer",
       "source": "./plugins/programmer",
       "description": "Six Programmer skills plus inert, reviewable guard-hook templates.",
-      "version": "0.2.0",
       "author": {
         "name": "AIWander"
       },
@@ -23,7 +22,6 @@
       "name": "programmer-skills",
       "source": "./plugins/programmer-skills",
       "description": "The same six Programmer skills with no hook code.",
-      "version": "0.2.0",
       "author": {
         "name": "AIWander"
       },
