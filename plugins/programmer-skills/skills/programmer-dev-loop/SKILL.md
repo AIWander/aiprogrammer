@@ -10,23 +10,23 @@ description: The edit-build-test-commit loop with Programmer-Wander tools, inclu
 ```
 read_file (grep first if large)
   -> edit_block            (surgical, atomic; one logical change per call)
-  -> bash "cargo build"    (or the project's build command)
-  -> bash "cargo test"
-  -> bash "git diff"       (review what actually changed)
-  -> bash "git commit"
+  -> cmd "cargo build"    (or the project's build command)
+  -> cmd "cargo test"
+  -> cmd "git diff"       (review what actually changed)
+  -> cmd "git commit"
 ```
 
-Git left the dev shell in the v2.0 rebuild. Drive it through `bash`, or use the
+Git left the dev shell in the v2.0 rebuild. Drive it through `cmd`, or use the
 `gitplus` add-on server's `git_*` tools when that server is registered.
 
 ## Rust on Windows - the rules that bite
 
-- **cargo goes through `bash`, never `powershell`.** PowerShell pipes corrupt
+- **cargo goes through `cmd`, never `powershell`.** PowerShell pipes corrupt
   cargo output and mangle ANSI on multi-line commits.
 - **Locked binary:** a running .exe cannot be overwritten. Build with an
   alternate target dir and swap by rename:
   ```
-  bash "CARGO_TARGET_DIR=/c/tmp/alt-target cargo build --release"
+  cmd "set CARGO_TARGET_DIR=C:\\temp\\alt-target&& cargo build --release"
   move_file  old exe -> old.exe.bak
   copy_file  new exe -> destination
   ```
@@ -37,7 +37,7 @@ Git left the dev shell in the v2.0 rebuild. Drive it through `bash`, or use the
 
 ## Long builds
 
-Blocking `bash` calls time out on big builds. Use a state-carrying session:
+Blocking `cmd` calls time out on big builds. Use a state-carrying session:
 
 ```
 shell_session  action=create

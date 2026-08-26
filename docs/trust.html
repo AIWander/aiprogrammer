@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Trust and signing - AIProgrammer</title>
-<meta name="description" content="How to verify Programmer-Wander release assets, signatures, checksums, alpha status, and runtime boundaries.">
+<meta name="description" content="How to verify Programmer-Wander v2 release-candidate assets, Authenticode signatures, checksums, and runtime boundaries.">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://aiprogrammer.ai/trust.html">
 <link rel="icon" href="favicon.ico">
@@ -24,26 +24,29 @@
 <header><div class="wrap"><nav aria-label="Primary"><strong>AIProgrammer</strong><a href="index.html">Home</a><a href="privacy.html">Privacy</a><a href="support.html">Support</a><a href="uninstall.html">Uninstall</a></nav></div></header>
 <main><div class="wrap">
   <h1>Trust the exact artifact, not the headline.</h1>
-  <p class="callout"><strong>Current maturity:</strong> there is no current public download. The earlier alpha has a known defect and is no longer offered from this site, and a verified signed replacement has not been published yet. Nothing here should be treated as production ready.</p>
+  <p class="callout"><strong>Current maturity:</strong> v2.0.0-rc.1 is a public release candidate, not a production-stable or one-click-installer claim. It ships as signed portable ZIPs. The ten-person cold-test gate and native-x64 hardware run remain open.</p>
 
   <h2>Official download boundary</h2>
-  <p>No installer is offered from this site right now, and the earlier alpha is not linked here. When a verified signed build is published, use only the assets attached to that exact published version of the official Programmer-Wander GitHub release, and match the asset to Windows x64 or ARM64. A source archive, fork, copied executable, or build from another commit is a different artifact.</p>
+  <p>Use only the x64 or ARM64 ZIP attached to the exact official <a href="https://github.com/AIWander/Programmer-Wander/releases/tag/v2.0.0-rc.1">v2.0.0-rc.1 release</a>. No MSI is offered for this RC. A source archive, fork, copied executable, or build from another commit is a different artifact.</p>
 
   <h2>Signing and checksum verification</h2>
-  <p>Published Programmer-Wander binaries and installers are Authenticode-signed and ship a <code>SHA256SUMS</code> asset. When a verified build is published, verify the file you actually downloaded before running it:</p>
-  <pre>Get-AuthenticodeSignature .\Programmer-Wander-Setup-x64.exe |
+  <p>The release ships <code>SHA256SUMS</code>, and the <code>programmer.exe</code> inside each ZIP is Authenticode-signed. Verify both layers:</p>
+  <pre>Get-FileHash .\programmer-wander-v2.0.0-rc.1-windows-x64.zip -Algorithm SHA256
+
+Expand-Archive .\programmer-wander-v2.0.0-rc.1-windows-x64.zip .\programmer-v2-rc
+Get-AuthenticodeSignature .\programmer-v2-rc\programmer.exe |
   Select-Object Status, StatusMessage, SignerCertificate
 
-Get-FileHash .\Programmer-Wander-Setup-x64.exe -Algorithm SHA256</pre>
-  <p>Require a valid Windows signature and inspect the signer identity. Compare the SHA-256 value with the same release's <code>SHA256SUMS</code>. A checksum catches a mismatch against that list; Authenticode is the separate publisher-provenance check.</p>
+Get-FileHash .\programmer-v2-rc\programmer.exe -Algorithm SHA256</pre>
+  <p>Require a valid Windows signature from Joseph Wander and inspect the timestamp certificate. Compare the ZIP SHA-256 with the same release's <code>SHA256SUMS</code>. A checksum catches a mismatch against that list; Authenticode is the separate publisher-provenance check.</p>
 
   <h2>Release versus source</h2>
   <p>The public server release and the repository's current <code>main</code> branch can differ. A fix visible in source is not present in your installed binary until a new release contains it. Record the release tag when reporting a problem.</p>
-  <p><strong>Known alpha identity defect:</strong> the current v0.2.0-alpha runtime can identify itself during MCP initialization as <code>antigravity-rs</code> version <code>1.0.0</code>. That response is not proof that the installed Programmer product name and release version are correct. Use the downloaded asset, signature, hash, and release tag as the artifact record until a later release fixes and proves the handshake identity.</p>
+  <p><strong>RC identity:</strong> the accepted v2.0.0-rc.1 binaries report MCP server name <code>programmer</code>, version <code>2.0.0-rc.1</code>, and exactly 49 unique tools. The retired v0.2.0-alpha assets have a different contract and must not be substituted.</p>
 
   <h2>Runtime and permission boundary</h2>
   <ul>
-    <li>Programmer exposes powerful local file, shell, git, process, data, and network tools to an MCP host.</li>
+    <li>Programmer exposes powerful local file, shell, process, data, system, and network tools to an MCP host.</li>
     <li>It does not grant the host new operating-system permissions. The account running the host defines the real access boundary.</li>
     <li>Consequential commands still require your review and the host's permission controls.</li>
     <li>The plugin repository's guard hooks are opt-in templates. They are inert until reviewed, rendered, installed, trusted, and tested in a supported hook route.</li>
@@ -52,6 +55,6 @@ Get-FileHash .\Programmer-Wander-Setup-x64.exe -Algorithm SHA256</pre>
   <h2>Evidence</h2>
   <p>Inspect the <a href="https://github.com/AIWander/Programmer-Wander">server source</a>, the <a href="https://github.com/AIWander/aiprogrammer">plugin-kit source</a>, the exact release notes, and the Apache-2.0 license. Source availability does not replace artifact verification.</p>
 </div></main>
-<footer><div class="wrap">AIProgrammer trust boundary - last reviewed July 23, 2026.</div></footer>
+<footer><div class="wrap">AIProgrammer trust boundary - last reviewed August 25, 2026.</div></footer>
 </body>
 </html>

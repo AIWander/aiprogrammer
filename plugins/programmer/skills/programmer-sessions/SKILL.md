@@ -16,7 +16,7 @@ as long as the working directory and environment carry over.
 
 Use `live_shell` (heavier, holds an OS process open) when the value is IN the process:
 an interactive REPL (python, node, sqlite), in-memory shell variables ($x = ...),
-a long-running command you read incrementally, or WSL bash state.
+a long-running command you read incrementally, or WSL shell state.
 
 If you are unsure, you almost always want `shell_session`. Reach for `live_shell`
 only when a fresh-process-per-command model would lose something.
@@ -62,4 +62,4 @@ live_shell(action=recover, session_id=repl)           # after a crash
 - Do not create a `live_shell` just to run three build commands - that is `shell_session` work.
 - Do not expect `live_shell` recover to restore in-memory variables - re-derive them from history.
 - Do not manage recovery files for `shell_session` by hand - persistence is automatic.
-- One-off commands need neither: plain `bash` or `powershell` is correct.
+- One-off commands need neither: plain `cmd` or `powershell` is correct.

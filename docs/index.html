@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AIProgrammer - give your AI a real Windows dev shell</title>
-<meta name="description" content="Programmer-Wander: a free, signed, single-binary MCP server with 105 tools in 11 categories. Files, shells, git, WSL, watchers, webhooks - a complete dev shell for Claude, LM Studio, and any MCP host.">
+<meta name="description" content="Programmer-Wander v2: a free, signed Windows MCP server with an exact 49-tool contract, optional skills and guard hooks, and a separate Voice headset add-on.">
 <meta property="og:title" content="AIProgrammer - give your AI a real Windows dev shell">
-<meta property="og:description" content="Free, signed, single binary. 105 tools in 11 categories. Manager, the optional delegation and dashboard companion, is Beta - coming soon.">
+<meta property="og:description" content="Free, signed, single binary. Exactly 49 tools in 10 ability groups. Optional Voice headset companion available separately.">
 <meta property="og:image" content="https://aiprogrammer.ai/icon_256.png">
 <meta property="og:url" content="https://aiprogrammer.ai">
 <link rel="icon" href="favicon.ico">
@@ -179,6 +179,7 @@
       <a href="#tools">Tools</a>
       <a href="#install">Install</a>
       <a href="#kit">Plugin kit</a>
+      <a href="#voice">Voice add-on</a>
       <a href="#upgrade">Upgrade</a>
       <a href="https://github.com/AIWander/Programmer-Wander">GitHub</a>
     </nav>
@@ -192,14 +193,14 @@
       <div class="kicker">Free forever - Windows native - Apache 2.0</div>
       <h1>Give your AI a <em>real dev shell</em>.</h1>
       <p class="lede"><b>Programmer-Wander</b> is a single signed binary that hands any AI a
-      complete Windows toolbox: files, shells, full git, WSL, persistent sessions,
-      watchers, webhooks, transforms. <b>105 tools in 11 organized categories.</b>
-      No cloud, no subscription, no telemetry.</p>
+      focused Windows toolbox: files, shells, persistent sessions, WSL, transforms,
+      safety checks, and system helpers. <b>Exactly 49 tools in 10 ability groups.</b>
+      Local-first, free, and open source.</p>
       <div class="cta-row">
-        <span class="btn btn-amber" aria-disabled="true" style="opacity:.72; cursor:default">Download coming soon - verified build in progress</span>
+        <a class="btn btn-amber" href="https://github.com/AIWander/Programmer-Wander/releases/tag/v2.0.0-rc.1">Download signed v2 RC</a>
         <a class="btn btn-ghost" href="#install">Or paste one prompt to your AI</a>
       </div>
-      <div class="under-cta">Programmer stays free. No installer is offered from this page right now; when the verified signed build is published, this page will link that exact version. Authenticode-signed - works with Claude Desktop, Claude Code, Cowork, LM Studio, any MCP host</div>
+      <div class="under-cta">Programmer stays free. v2.0.0-rc.1 ships as Authenticode-signed portable ZIPs for Windows x64 and ARM64. Works with Claude Desktop, Claude Code, LM Studio, and local MCP hosts.</div>
     </div>
 
     <div class="term">
@@ -207,8 +208,8 @@
       <div class="term-body">
         <div class="type-line"><span class="t-amber">&gt;</span> Fix the failing test and commit it.</div>
         <div class="type-line d2"><span class="t-dim">[Files]</span> read_file <span class="t-dim">-&gt;</span> <span class="t-cyan">edit_block</span> <span class="t-dim">applied</span></div>
-        <div class="type-line d3"><span class="t-dim">[Shell]</span> bash cargo test <span class="t-ok">.... 24 passed</span></div>
-        <div style="margin-top:4px"><span class="t-dim">[Git]</span> <span class="t-violet">git_commit</span> <span class="t-dim">"fix: off-by-one in parser"</span> <span class="cursor"></span></div>
+        <div class="type-line d3"><span class="t-dim">[Shell]</span> cmd cargo test <span class="t-ok">.... 24 passed</span></div>
+        <div style="margin-top:4px"><span class="t-dim">[Shell]</span> <span class="t-violet">cmd</span> <span class="t-dim">git commit -m "fix: parser boundary"</span> <span class="cursor"></span></div>
       </div>
     </div>
   </div>
@@ -226,22 +227,20 @@
 <section id="tools">
   <div class="wrap">
     <div class="sec-kicker">tools/list</div>
-    <h2>105 tools that come up organized.</h2>
-    <p class="sec-lede">Every tool is tagged with its category and listed in a curated
-    workbench order - so your AI's tool list reads grouped in any host, and it picks
-    the right tool the first time.</p>
+    <h2>49 tools with one test-enforced contract.</h2>
+    <p class="sec-lede">The source registry, runtime <code>tools/list</code>, plugin skills,
+    and capability map agree on the same names and counts.</p>
     <div class="cats">
-      <div class="cat"><span class="tag">[Files]</span><span class="n">13</span><p>read, write, atomic edit_block surgery, copy/move, diff, tail, stats</p></div>
-      <div class="cat"><span class="tag">[Search]</span><span class="n">4</span><p>native-speed grep, file search, smart large-file reads</p></div>
-      <div class="cat"><span class="tag">[Shell]</span><span class="n">8</span><p>bash, powershell, one-shots, chains, auto-retry, saved shortcuts</p></div>
-      <div class="cat"><span class="tag">[Git]</span><span class="n">12</span><p>status to clone, push, stash, remotes - the whole cycle</p></div>
-      <div class="cat"><span class="tag">[Sessions]</span><span class="n">20</span><p>persistent shells that keep state, history, checkpoints, crash recovery</p></div>
-      <div class="cat"><span class="tag">[Background]</span><span class="n">12</span><p>file watchers, local webhooks, WSL background jobs with logs</p></div>
-      <div class="cat"><span class="tag">[Net]</span><span class="n">4</span><p>HTTP request, download, scrape-to-text, port checks</p></div>
-      <div class="cat"><span class="tag">[Data]</span><span class="n">16</span><p>json/csv/base64/hash transforms, archives, sqlite, md-to-docx</p></div>
-      <div class="cat"><span class="tag">[System]</span><span class="n">9</span><p>screenshot, clipboard, processes, registry read, toast notifications</p></div>
-      <div class="cat"><span class="tag">[Guard]</span><span class="n">5</span><p>command pre-flight, audit log, deploy preflight, tool fallbacks</p></div>
-      <div class="cat"><span class="tag">[Plan]</span><span class="n">2</span><p>task ingredients and cross-server planning</p></div>
+      <div class="cat"><span class="tag">[Files]</span><span class="n">7</span><p>read, write, edit, copy, move, create, and list local files</p></div>
+      <div class="cat"><span class="tag">[Shell]</span><span class="n">5</span><p>Command Prompt, PowerShell, shortcuts, and process control</p></div>
+      <div class="cat"><span class="tag">[Sessions]</span><span class="n">2</span><p>remembered command context and a real long-lived shell</p></div>
+      <div class="cat"><span class="tag">[Search]</span><span class="n">1</span><p>search files by name or content</p></div>
+      <div class="cat"><span class="tag">[System]</span><span class="n">5</span><p>screenshots, system info, clipboard, and Markdown conversion</p></div>
+      <div class="cat"><span class="tag">[WSL]</span><span class="n">4</span><p>foreground and background Linux execution from Windows</p></div>
+      <div class="cat"><span class="tag">[Transforms]</span><span class="n">14</span><p>archives, structured data, encoding, diffs, scaffolds, and stats</p></div>
+      <div class="cat"><span class="tag">[Net]</span><span class="n">2</span><p>HTTP requests and port checks</p></div>
+      <div class="cat"><span class="tag">[Guard]</span><span class="n">2</span><p>target-aware command evaluation and privacy-safe audit records</p></div>
+      <div class="cat"><span class="tag">[Infra + Meta]</span><span class="n">7</span><p>health, preflight, config, planning, SQLite, registry, and doctor</p></div>
     </div>
   </div>
 </section>
@@ -251,20 +250,19 @@
     <div class="sec-kicker">sixty seconds</div>
     <h2>Install it - or let your AI install it.</h2>
     <p class="sec-lede">Our favorite way: paste one prompt and your AI does the rest.
-    No other tool onboards through the AI itself. The prompt below prepares the setup now;
-    it installs once the verified build is published.</p>
+    The prompt below keeps verification and host registration explicit.</p>
 
     <div class="paste">
       <div class="paste-grid">
-        <pre id="prompt-text">Help me plan a Programmer-Wander setup on my Windows machine: identify my architecture and the correct host route, and show me the exact target and rollback step. Do not download or install anything yet - the verified build is not published.</pre>
+        <pre id="prompt-text">Install Programmer-Wander v2.0.0-rc.1 from the official AIWander GitHub prerelease. Detect Windows x64 versus ARM64, verify the ZIP against SHA256SUMS, verify programmer.exe has a valid Joseph Wander Authenticode signature, then show me the exact host config and backup path before registering it. Do not restart any host until I confirm.</pre>
         <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('prompt-text').textContent).then(()=>{this.textContent='copied'; setTimeout(()=>this.textContent='copy prompt',1600)})">copy prompt</button>
       </div>
     </div>
 
     <div style="height:28px"></div>
     <div class="steps">
-      <div class="step"><b>Get the binary</b><p>The verified signed build is coming soon. No installer or portable zip is offered from this page yet; when one is published it will be named by exact version. One file; state lives beside it.</p></div>
-      <div class="step"><b>Register your host</b><p><code>programmer.exe install --target claude-desktop</code> - or claude-code, cowork, lm-studio, all.</p></div>
+      <div class="step"><b>Get the binary</b><p>Choose the exact signed <a href="https://github.com/AIWander/Programmer-Wander/releases/tag/v2.0.0-rc.1">v2.0.0-rc.1</a> x64 or ARM64 ZIP and verify it before extraction.</p></div>
+      <div class="step"><b>Register your host</b><p><code>programmer.exe install --target claude-desktop</code> - or claude-code, lm-studio, all.</p></div>
       <div class="step"><b>Restart and ask</b><p>Restart the host, then ask: <code>What can the programmer server do?</code> The bundled skills teach it everything.</p></div>
     </div>
   </div>
@@ -274,13 +272,30 @@
   <div class="wrap">
     <div class="sec-kicker">plugin kit</div>
     <h2>Skills that make your AI good at it. Guard hooks that keep it safe.</h2>
-    <p class="sec-lede">Five skills (orientation, full toolmap, dev loop, background ops,
-    safe ops) plus opt-in guard hooks that block destructive commands and audit every
+    <p class="sec-lede">Six skills (orientation, full toolmap, dev loop, background ops,
+    sessions, and safe ops) plus opt-in guard hooks that block destructive commands and audit every
     decision - inert until you review and render them yourself.</p>
     <div class="paste"><div class="paste-grid">
       <pre id="mkt-text">claude plugin marketplace add AIWander/aiprogrammer</pre>
       <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('mkt-text').textContent).then(()=>{this.textContent='copied'; setTimeout(()=>this.textContent='copy command',1600)})">copy command</button>
     </div></div>
+  </div>
+</section>
+
+<section id="voice">
+  <div class="wrap">
+    <div class="upgrade">
+      <div>
+        <div class="sec-kicker" style="color:var(--cyan)">optional voice add-on</div>
+        <h2>Step away from the keyboard. Keep the AI attached.</h2>
+        <p class="sec-lede">Programmer works fully on its own. Add the separate free
+        <b>Voice-Command</b> companion when you want local headset input and spoken output.
+        Voice requires your microphone permission and its own setup. Web or mobile AI use
+        still needs an authenticated remote connector back to the Windows host.</p>
+        <a class="btn btn-ghost" href="https://github.com/AIWander/Voice-Command/releases/tag/v3.0.0">Get Voice-Command v3.0.0</a>
+      </div>
+      <div class="price"><div class="amt" style="font-size:34px">OPTIONAL<br>FREE</div><div class="per">local headset companion</div></div>
+    </div>
   </div>
 </section>
 
@@ -296,7 +311,7 @@
           <li><b>Task history, alerts, continuity</b> across sessions and restarts</li>
         </ul>
         <span class="btn btn-ghost" aria-disabled="true" style="border-color:var(--violet); opacity:.72; cursor:default">Manager Beta - Coming Soon</span>
-        <p style="margin-top:14px; font-size:13.5px; color:var(--faint)">Programmer stays free either way. No price is published for Manager and there is no checkout, so nothing here is an offer to sell. Voice add-on: also free, optional on both.</p>
+        <p style="margin-top:14px; font-size:13.5px; color:var(--faint)">Programmer stays free either way. No price is published for Manager and there is no checkout, so nothing here is an offer to sell. Voice remains a separate free option.</p>
       </div>
       <div class="price"><div class="amt" style="font-size:34px">BETA<br>COMING SOON</div><div class="per">no published price and no checkout</div></div>
     </div>
@@ -309,6 +324,7 @@
     <div>AIProgrammer is part of <a href="https://aiwander.ai">AIWander</a></div>
     <div><a href="https://github.com/AIWander/Programmer-Wander">Server source</a></div>
     <div><a href="https://github.com/AIWander/aiprogrammer">Plugin kit</a></div>
+    <div><a href="https://github.com/AIWander/Voice-Command/releases/tag/v3.0.0">Voice add-on</a></div>
     <div><a href="https://github.com/AIWander/Programmer-Wander/blob/main/LICENSE">Apache 2.0</a></div>
     <div><a href="privacy.html">Privacy</a></div>
     <div><a href="trust.html">Trust</a></div>

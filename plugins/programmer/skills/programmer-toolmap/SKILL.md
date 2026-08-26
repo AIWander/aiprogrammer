@@ -24,8 +24,8 @@ scraping -> hands). What remains is the dev shell.
 
 | Tool | Use |
 |---|---|
-| `bash` | One-off command, output + exit code |
-| `powershell` | One-off PowerShell - the versatile Windows tool (never for cargo; use bash) |
+| `cmd` | One-off command through `cmd.exe /C`, output + exit code |
+| `powershell` | One-off PowerShell - the versatile Windows tool (never for cargo; use cmd) |
 | `shortcut` | `mode=list` saved shortcuts; `mode=run` executes `names=[]` (saved, `$param` substitution via `params`) and/or `commands=[]` (raw sequence), inside `session_id`, `stop_on_error` control |
 | `list_process` / `kill_process` | Process listing / kill by PID |
 
@@ -104,7 +104,7 @@ scraping -> hands). What remains is the dev shell.
 
 ## What moved where (so you look in the right server)
 
-- Git (all of it, plus GitHub/GitLab/Gitea APIs) -> the **gitplus** add-on server; or shell out via `bash`.
+- Git (all of it, plus GitHub/GitLab/Gitea APIs) -> the **gitplus** add-on server; or shell out via `cmd`.
 - Resource watches + inbound webhooks -> **autonomous** (`pulse_watch`, `pulse_webhook`).
 - Page scraping -> **hands** (`browser_http_scrape`); desktop notifications -> **local** (`notify`).
-- Local-LLM builds additionally get `smart_exec` (auto-routing) - 50 tools in that profile.
+- All supported builds expose the same 49-tool contract; feature flags do not add another public tool.

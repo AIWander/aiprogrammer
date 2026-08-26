@@ -9,11 +9,13 @@ Programmer is a full dev shell. These rules keep it reversible.
 
 ## Command pre-flight
 
-Command-entry tools (`bash`, `powershell`, `shell_session`, `live_shell`,
-`wsl_run`, `wsl_bg`) pass through `security_check_cmd`
+Command-entry tools (`cmd`, `powershell`, `shortcut`, `shell_session`,
+`live_shell`, `wsl_run`, `wsl_bg`) pass through `security_check_cmd`
 automatically. Critical destructive patterns are blocked and logged; recursive
-deletes must target an obviously disposable path (`target/`, `build/`, `tmp/`,
-`.cache/`). To check a command before running it, call `security_check_cmd`
+deletes must use concrete targets whose path contains an obviously disposable
+component (`target`, `build`, `tmp`, `.cache`, `node_modules`, or `dist`). Every
+target is checked; mixed safe and unsafe targets, roots, traversal, variables,
+and wildcards are blocked. To check a command before running it, call `security_check_cmd`
 directly. Review decisions with `security_audit_log`.
 
 ## Archive-first
@@ -39,8 +41,9 @@ letting owners stop their own processes.
 
 ## Deploys
 
-`deploy_preflight` verifies sources exist and servers are running before you
-copy anything. Run it before any deploy-shaped operation.
+`deploy_preflight` validates the selected project directory, its `src` folder,
+and its Cargo manifest before you copy anything. Run `server_health` separately
+when the operation also depends on a named process already running.
 
 ## Escalation
 

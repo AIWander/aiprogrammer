@@ -6,7 +6,7 @@ Release readiness requires evidence at five separate layers:
 2. The host config contains the intended command and no unrelated changes.
 3. MCP `initialize` returns the expected server name and version.
 4. `tools/list` returns the documented tool count for the release under test
-   (`v0.2.0-alpha`: 105 tools in 11 categories; v2.0: 49 tools in 10).
+   (`v2.0.0-rc.1`: 49 tools in 10 ability groups).
 5. Uninstall removes only Programmer and preserves every pre-existing config
    entry and every backup.
 
@@ -16,24 +16,25 @@ executable:
 ```powershell
 .\distribution\Test-ProgrammerMcp.ps1 `
     -ProgrammerPath '.\path\to\programmer.exe' `
-    -ExpectedName 'programmer-wander' `
-    -ExpectedVersion '0.2.0-alpha'
+    -ExpectedName 'programmer' `
+    -ExpectedVersion '2.0.0-rc.1'
 ```
 
-For both current published portable artifacts, the observed result is:
+For both signed release-candidate portable artifacts, the accepted result is:
 
-- `ToolCount`: 105
-- `CategoryCount`: 11
+- `ToolCount`: 49
+- `CategoryCount`: 10
 - `ToolContractMatches`: true
-- `ServerName`: `antigravity-rs`
-- `ServerVersion`: `1.0.0`
-- `IdentityMatches`: false
+- `ServerName`: `programmer`
+- `ServerVersion`: `2.0.0-rc.1`
+- `IdentityMatches`: true
 
-That is a stop-ship failure, not a cosmetic warning.
+The same acceptance must be rerun against the exact bytes under review; a source
+test or different artifact is not a substitute.
 
 For clean install and uninstall testing, use a separate Windows account or VM.
-The current executable's home-directory lookup is not isolated by changing
-`USERPROFILE`. Snapshot the host config before install, after install, and
-after uninstall; compare parsed JSON semantics as well as raw hashes. Run a
-rapid install/uninstall scenario specifically to prove backup filenames cannot
-collide.
+The RC honors explicit `APPDATA` and `USERPROFILE` roots, which supports a bounded
+compatibility harness, but that does not replace a real clean-host acceptance run.
+Snapshot the host config before install, after install, and after uninstall;
+compare parsed JSON semantics as well as raw hashes. Run two installs in the same
+second and preserve both backups before uninstall.

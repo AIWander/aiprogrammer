@@ -1,6 +1,6 @@
 # Claude Desktop
 
-Status: STAGED for controlled testing; not READY for public distribution.
+Status: signed portable RC available; MCPB packaging remains unaccepted.
 
 Two local paths exist:
 
@@ -28,11 +28,11 @@ if (Test-Path -LiteralPath $ClaudeConfig) {
 }
 ```
 
-Do not double-click or distribute the repo's MCPB candidates as production
-packages. They intentionally bundle the current alpha release, whose MCP
-identity is wrong. The MCPB format also cannot express Windows CPU architecture
+Do not double-click or distribute the repo's older MCPB candidates as production
+packages. They do not contain the accepted v2 RC bytes. The MCPB format also cannot express Windows CPU architecture
 in its current compatibility object, so x64 and ARM64 are separate,
 architecture-labelled files.
 
+The RC CLI uses unique backup names even for repeated same-second operations.
 Restart Claude Desktop after any approved configuration change, then run the
 [runtime verification guide](verify.md).

@@ -1,6 +1,6 @@
 # LM Studio
 
-Status: STAGED config flow; BLOCKED as a public one-click install.
+Status: signed portable RC and manual config flow available; one-click deeplink remains separate.
 
 LM Studio's `lmstudio://add_mcp` deeplink installs an MCP configuration. It does
 not download or verify `programmer.exe`. Install and hash-check the executable
@@ -26,8 +26,8 @@ The generator:
 - URL-encodes the name and Base64 value;
 - never opens the deeplink or edits LM Studio configuration.
 
-Review the emitted JSON and link before opening it. The current alpha's runtime
-identity defect remains even when the deeplink itself is valid.
+Review the emitted JSON and link before opening it. The deeplink is configuration
+only and must point to the exact verified v2 RC executable.
 
 ## Manual CLI registration
 
@@ -37,9 +37,9 @@ The published binary also exposes:
 & $ProgrammerExe install --target lm-studio
 ```
 
-That command edits LM Studio's MCP configuration and currently uses a
-second-resolution backup name. Make and verify your own backup first, and do
-not automate immediate install/uninstall sequences.
+That command edits LM Studio's MCP configuration and creates a collision-proof
+backup. An independent verified backup remains a useful defense before any config
+change.
 
 LM Studio follows Cursor-style `mcp.json` notation and supports local command
 entries. See <https://lmstudio.ai/docs/app/mcp> and the official deeplink format

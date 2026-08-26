@@ -1,8 +1,8 @@
 # Codex
 
-Status: STAGED for controlled testing; not READY for public submission.
+Status: signed portable RC available; directory submission remains separate.
 
-Programmer-Wander has no `install --target codex` target in `v0.2.0-alpha`.
+Programmer-Wander has no `install --target codex` target in `v2.0.0-rc.1`.
 Use Codex's own MCP command after verifying the executable.
 
 ## 1. Register the MCP server
@@ -44,6 +44,5 @@ hook definitions automatically.
 ## 3. Restart and verify
 
 Restart Codex, open a new task, and verify both the plugin and MCP connection.
-The current alpha still fails the expected Programmer identity check described
-in [runtime verification](verify.md), so do not treat discovery as release
-readiness.
+The accepted RC result is server name `programmer`, version `2.0.0-rc.1`, and
+exactly 49 unique tools. Discovery alone is not that proof.

@@ -1,6 +1,6 @@
 # Claude Code
 
-Status: STAGED for controlled testing; not READY for public submission.
+Status: signed portable RC available; plugin-directory submission remains separate.
 
 ## 1. Install and verify the server
 
@@ -12,8 +12,8 @@ $ProgrammerExe = (Resolve-Path -LiteralPath '.\programmer.exe').Path
 & $ProgrammerExe --version
 ```
 
-Before allowing the alpha installer to edit Claude Code configuration, make an
-independent backup with sub-second uniqueness:
+Before allowing the RC CLI to edit Claude Code configuration, make an independent
+backup as an additional recovery layer:
 
 ```powershell
 $ClaudeSettings = Join-Path $env:USERPROFILE '.claude\settings.json'
@@ -32,8 +32,8 @@ Register the server only after reviewing that backup:
 & $ProgrammerExe install --target claude-code
 ```
 
-Do not script an immediate uninstall after install. The current release can
-reuse a second-resolution backup filename.
+The RC also creates a unique recoverable backup on every config write, including
+multiple operations in the same second.
 
 ## 2. Install one plugin profile
 
@@ -53,5 +53,6 @@ session. Use the [runtime verification guide](verify.md). A visible plugin,
 running process, or successful `--version` call is not enough: MCP
 `initialize` and `tools/list` must both match the release.
 
-Clean-host acceptance must use a separate Windows account or VM. Overriding
-`USERPROFILE` alone does not redirect the current binary's home lookup.
+The RC honors explicit `USERPROFILE` and `APPDATA` roots. The public cold-test gate
+still requires a separate Windows account or VM rather than treating an environment
+override as complete clean-machine proof.

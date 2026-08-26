@@ -3,12 +3,11 @@
 
 Run: python plugins/programmer/tests/test_programmer_policy.py
 
-Both bypasses covered here were live on 2026-08-22:
+The coverage failures behind these regressions were live in the prior profile:
 
-  * COMMAND_TOOLS still described the retired v0.2.0-alpha surface, so
-    shell_session and live_shell - the two v2.0 tools that actually execute an
-    arbitrary command string - never reached the destructive-command check,
-    while four dead names occupied the set.
+  * COMMAND_TOOLS carried retired names and omitted live command shapes.
+  * The public one-off shell name was `bash` even though the server ran cmd.exe.
+  * A disposable substring anywhere in a command allowed unsafe mixed targets.
   * base_tool() did not normalize case, so mcp__programmer__Powershell matched
     no set and ran unguarded.
 
@@ -30,11 +29,14 @@ sys.path.insert(0, str(POLICY_DIR))
 
 import programmer_hook  # noqa: E402 - import follows portable path setup
 
-DESTRUCTIVE = "rm -rf C:/important/data"
+DESTRUCTIVE = "rmdir /s C:\\important\\data"
 
 # The v2.0 surface, verified by a live MCP initialize + tools/list handshake.
-LIVE_COMMAND_TOOLS = {"bash", "powershell", "wsl_run", "wsl_bg", "shell_session", "live_shell"}
-RETIRED_TOOLS = {"run", "chain", "psession_run", "smart_exec"}
+LIVE_COMMAND_TOOLS = {
+    "cmd", "powershell", "shortcut", "wsl_run", "wsl_bg",
+    "shell_session", "live_shell",
+}
+RETIRED_TOOLS = {"run", "chain", "psession_run", "smart_exec", "bash"}
 
 
 def decide(tool: str, args: dict) -> str:
@@ -76,16 +78,84 @@ class DestructiveCommandGuard(unittest.TestCase):
             with self.subTest(tool=tool):
                 self.assertEqual(decide(tool, {"action": "run", "command": DESTRUCTIVE}), "deny")
 
+    def test_shortcut_raw_command_list_is_guarded(self):
+        self.assertEqual(
+            decide("shortcut", {"mode": "run", "commands": ["echo ready", DESTRUCTIVE]}),
+            "deny",
+        )
+
     def test_tool_name_casing_cannot_bypass_the_guard(self):
         for tool in ("Powershell", "POWERSHELL", "Shell_Session", "live_SHELL"):
             with self.subTest(tool=tool):
                 self.assertEqual(decide(tool, {"command": DESTRUCTIVE}), "deny")
 
     def test_ordinary_build_command_is_not_denied(self):
-        self.assertNotEqual(decide("bash", {"command": "cargo build --release"}), "deny")
+        self.assertNotEqual(decide("cmd", {"command": "cargo build --release"}), "deny")
 
-    def test_recursive_delete_of_a_disposable_path_is_not_denied(self):
-        self.assertNotEqual(decide("bash", {"command": "rm -rf target/"}), "deny")
+    def test_malformed_non_delete_is_not_misclassified_as_a_delete(self):
+        self.assertNotEqual(decide("cmd", {"command": 'echo "unfinished'}), "deny")
+
+    def test_recursive_delete_of_disposable_paths_is_not_denied(self):
+        commands = (
+            "rmdir /s target",
+            'RMDIR /S "C:\\work\\BUILD"',
+            "rm -rf dist/",
+            'Remove-Item -LiteralPath "C:\\work\\.cache" -Recurse -Force',
+        )
+        for command in commands:
+            with self.subTest(command=command):
+                self.assertNotEqual(decide("cmd", {"command": command}), "deny")
+
+    def test_mixed_safe_and_unsafe_targets_are_denied(self):
+        commands = (
+            "rmdir /s target C:\\important\\data",
+            "rm -rf target/ C:/important/data",
+            'Remove-Item -Path "dist","C:\\important" -Recurse -Force',
+        )
+        for command in commands:
+            with self.subTest(command=command):
+                self.assertEqual(decide("cmd", {"command": command}), "deny")
+
+    def test_disposable_substrings_are_not_treated_as_path_components(self):
+        for command in ("rm -rf C:/important/targeted", "rmdir /s C:\\work\\distribution"):
+            with self.subTest(command=command):
+                self.assertEqual(decide("cmd", {"command": command}), "deny")
+
+    def test_every_delete_in_a_chained_command_is_validated(self):
+        commands = (
+            'rmdir /s "target" & rmdir /s "C:\\important"',
+            'rm -rf "build/" && rm -rf "C:/important/data"',
+            'Remove-Item -Recurse -Force "tmp"; Remove-Item -Recurse -Force "C:\\important"',
+        )
+        for command in commands:
+            with self.subTest(command=command):
+                self.assertEqual(decide("cmd", {"command": command}), "deny")
+
+    def test_root_dot_parent_and_dynamic_targets_are_denied(self):
+        commands = (
+            "rmdir /s .",
+            "rmdir /s ..",
+            "rmdir /s C:\\",
+            "rmdir /s %TEMP%",
+            "rm -rf target/*",
+        )
+        for command in commands:
+            with self.subTest(command=command):
+                self.assertEqual(decide("cmd", {"command": command}), "deny")
+
+    def test_ambiguous_wrapped_delete_is_denied(self):
+        command = 'powershell -Command "Remove-Item -Recurse -Force target"'
+        self.assertEqual(decide("cmd", {"command": command}), "deny")
+
+    def test_powershell_remove_item_aliases_validate_every_target(self):
+        commands = (
+            "ri -Path target,C:\\important -Recurse -Force",
+            "del target C:\\important -Recurse -Force",
+            "rmdir -LiteralPath dist,C:\\important -Recurse -Force",
+        )
+        for command in commands:
+            with self.subTest(command=command):
+                self.assertEqual(decide("powershell", {"command": command}), "deny")
 
 
 class ServerKillGuard(unittest.TestCase):

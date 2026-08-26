@@ -12,7 +12,7 @@ surface is 49 tools in 10 categories:
 | Category | What lives there (7/5/2/1/5/4/14/2/2/7 tools) |
 |---|---|
 | Files | `read_file`, `write_file`, `edit_block`, `copy_file`, `move_file`, `create_dir`, `list_dir` |
-| Shell | `bash`, `powershell`, `shortcut`, `list_process`, `kill_process` |
+| Shell | `cmd`, `powershell`, `shortcut`, `list_process`, `kill_process` |
 | Sessions | `shell_session` (remembered cwd/env), `live_shell` (real REPL process) |
 | Search | `search_file` |
 | System | `screenshot`, `system_info`, `clipboard_read`, `clipboard_write`, `md2docx` |
@@ -38,7 +38,7 @@ builds. Local compute does the I/O; the model's tokens do the reasoning.
 
 ## First moves
 
-- One-off command: `bash` (Git Bash - use for cargo, jq, here-docs)
+- One-off command: `cmd` (`cmd.exe /C`; use it for cargo and Git)
 - Windows-specific cmdlets/ACLs/CIM: `powershell`
 - Surgical code edit: `edit_block` (never `write_file` for edits)
 - Long build: `shell_session` (action `create`, then `run`, then `read`)
@@ -57,7 +57,7 @@ builds. Local compute does the I/O; the model's tokens do the reasoning.
 
 ## Hard-won rules
 
-- cargo via `bash`, never `powershell` - PowerShell pipes corrupt cargo output.
+- cargo via `cmd`, never `powershell` - PowerShell pipes corrupt cargo output.
 - `edit_block` over `write_file` for code surgery - atomic, context-preserving.
 - A locked .exe cannot be overwritten while running: build to an alternate
   target dir, then swap with a rename. See `programmer-safe-ops`.

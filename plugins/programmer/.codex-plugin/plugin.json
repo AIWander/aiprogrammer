@@ -1,6 +1,6 @@
 {
   "name": "programmer",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Operate the Programmer-Wander dev shell with six skills and optional reviewed guard-hook templates.",
   "author": {
     "name": "AIWander"
@@ -17,7 +17,7 @@
     "defaultPrompt": [
       "Fix this bug and commit the change.",
       "Build the project and show me the errors.",
-      "Watch this folder and tell me when it changes."
+      "Run this long build in a persistent session and report the result."
     ]
   }
 }

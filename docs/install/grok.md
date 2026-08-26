@@ -1,6 +1,6 @@
 # Grok CLI
 
-Status: STAGED for controlled testing; not READY for public submission.
+Status: manual configuration prepared; not a native RC installer target.
 
 ## 1. Install and verify the server
 
@@ -31,10 +31,9 @@ command = "C:\\path\\to\\programmer.exe"
 args = []
 ```
 
-If your release's `programmer.exe install` command lists a Grok target, you can
-use it instead; review the same config backup first either way. Reload MCP
-servers (press `r` in `/mcps`) or start a fresh Grok session, then confirm the
-programmer tools appear.
+The v2.0.0-rc.1 CLI does not list a Grok target, so use the reviewed manual entry.
+Reload MCP servers (press `r` in `/mcps`) or start a fresh Grok session, then
+confirm the programmer tools appear.
 
 ## 3. Install one plugin profile
 

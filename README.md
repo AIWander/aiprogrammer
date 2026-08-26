@@ -8,34 +8,27 @@
 
 Programmer-Wander is a single signed binary exposing a Rust + Windows dev shell.
 The v2.0 surface is 49 tools in 10 organized categories (Files, Shell, Sessions,
-Search, System, WSL, Transforms + Stats, Net, Guard, Infra + Meta); the earlier
-`v0.2.0-alpha` release exposed 105 tools in 11 categories. This repository is the
-plugin kit that teaches an AI host how to use it well - and, optionally, how to
-guard it.
+Search, System, WSL, Transforms + Stats, Net, Guard, Infra + Meta). This repository
+is the plugin kit that teaches an AI host how to use it well - and, optionally,
+how to guard it.
 
 ## Install status
 
-The current server release, `v0.2.0-alpha`, is for controlled Windows alpha
-testing. It is not yet a broad one-click release. A fresh probe of the published
-x64 and ARM64 portable artifacts found three release blockers:
-
-- `programmer.exe --version` reports `0.2.0-alpha`, but MCP `initialize`
-  identifies the server as `antigravity-rs` version `1.0.0`.
-- install and uninstall operations started within the same second can reuse a
-  backup filename and overwrite the earlier host-config backup.
-- overriding `USERPROFILE` does not isolate the executable's home-directory
-  lookup, so a separate Windows account or VM is required for clean-host proof.
-
-The server still returned the documented 105 tools in 11 categories, but that
-does not clear the identity, backup-integrity, or clean-host defects.
+The current server release is the signed portable `v2.0.0-rc.1` release candidate.
+Its x64 and ARM64 binaries report `programmer` `2.0.0-rc.1`, expose exactly 49
+unique tools, honor explicit profile roots, create collision-proof backups, and
+pass isolated-profile install/runtime/uninstall checks. The ARM64 binary was tested
+natively; x64 was compatibility-tested on the ARM64 Windows host, so native-x64
+hardware acceptance and the ten-person cold-test gate remain open. This RC does not
+claim a one-click MSI installer or production-stable status.
 
 See the [host install guides](docs/install/README.md) for the exact supported
 paths, release hashes, verification steps, and blocked channels.
 
 ## Install
 
-1. Download the correct signed installer or portable zip from the
-   [`v0.2.0-alpha` release](https://github.com/AIWander/Programmer-Wander/releases/tag/v0.2.0-alpha)
+1. Download the correct signed portable zip from the exact
+   [`v2.0.0-rc.1` release](https://github.com/AIWander/Programmer-Wander/releases/tag/v2.0.0-rc.1)
    and verify it against the published `SHA256SUMS`.
 2. Follow the guide for
    [Claude Code](docs/install/claude-code.md),
@@ -61,7 +54,7 @@ connection. They do not install the server or silently activate hooks.
 | `programmer-getting-started` | Orientation: category map, first moves, hard-won rules |
 | `programmer-toolmap` | Full per-tool reference, organized by category |
 | `programmer-dev-loop` | The edit-build-test-commit loop, cargo-on-Windows rules |
-| `programmer-background-ops` | Persistent shells, WSL jobs, watchers, webhooks, delta polling |
+| `programmer-background-ops` | Persistent shells, WSL jobs, and alternatives for removed watcher/webhook tools |
 | `programmer-safe-ops` | Command pre-flight, archive-first, staged swaps, kill hygiene |
 | `programmer-sessions` | Choosing between shell_session and live_shell, and their recovery semantics |
 
@@ -77,12 +70,20 @@ Rendering writes host-ready JSON with your real paths into
 `plugins/programmer/rendered-hooks/` (local only, not tracked); Claude-style,
 Grok, and Codex fragments all share the one reviewed policy file.
 
+## Optional voice add-on
+
+Programmer works on its own. For local hands-free headset use, add the separate
+free [Voice-Command v3.0.0](https://github.com/AIWander/Voice-Command/releases/tag/v3.0.0).
+Voice requires microphone permission and its own setup. Web or mobile AI access
+also requires an authenticated remote connector back to the Windows host.
+
 ## Upgrade
 
-Programmer is free and stays free. The $5 upgrade is **UniMan** - a universal
+Programmer is free and stays free. The future upgrade is **UniMan** - a universal
 manager that delegates work to Claude Code, Codex CLI, and Grok Build CLI, with
 one live dashboard covering both products (it detects your Programmer install
-automatically). Details at [aiprogrammer.ai](https://aiprogrammer.ai).
+automatically). Manager is beta/coming soon; there is no published checkout or
+price. Details at [aiprogrammer.ai](https://aiprogrammer.ai).
 
 ## License
 
