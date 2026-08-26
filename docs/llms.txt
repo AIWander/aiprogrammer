@@ -1,0 +1,18 @@
+# AI Programmer
+
+> A free MCP dev shell for AI agents on Windows: files, shells, git, WSL, and sessions. Written in Rust.
+
+- Publisher: AIWander
+- Platform: Windows
+- Pricing: not published
+
+## Two repositories, two jobs
+- [Programmer-Wander](https://github.com/AIWander/Programmer-Wander) - the MCP server itself. Holds every release and every downloadable binary.
+- [aiprogrammer](https://github.com/AIWander/aiprogrammer) - skills, guard hooks, and plugin profiles, plus the source for this site. No releases by design.
+
+## Download
+- [Releases](https://github.com/AIWander/Programmer-Wander/releases) - current public release is v0.2.0-alpha. A corrected successor is in progress and is not published yet.
+
+## Notes
+- Runs locally. Reads and writes the user own files and runs the user own commands, only when invoked.
+- Bring your own AI: works with any stdio MCP client. No model key is requested.
